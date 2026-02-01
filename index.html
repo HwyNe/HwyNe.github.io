@@ -4,1326 +4,332 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Entropy - Cybersecurity Toolkit</title>
-    <meta name="description" content="Professional cybersecurity toolkit for CTF, bug bounty, and penetration testing">
     
-    <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha512/0.8.0/sha512.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.3.2/jsencrypt.min.js"></script>
     
- <style>
-     html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-}
-     * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    <style>
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e9ecef;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
 
-/* ============================= */
-/*        THEME VARIABLES        */
-/* ============================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg-primary); color: var(--text-primary); height: 100vh; overflow: hidden; }
+        .container { display: flex; height: 100vh; }
 
-:root[data-theme="dark"] {
-    --bg-primary: #1e1e1e;
-    --bg-secondary: #252526;
-    --bg-tertiary: #2d2d30;
+        /* Sidebar */
+        .sidebar { width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+        .logo { padding: 24px 20px; border-bottom: 1px solid var(--border); background: #f1f5f9; }
+        .logo h1 { font-size: 18px; color: var(--accent); }
+        .nav-section { padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .nav-title { padding: 0 20px 8px; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
+        .nav-item { padding: 8px 20px; cursor: pointer; font-size: 13px; color: var(--text-primary); transition: 0.2s; }
+        .nav-item:hover { background: var(--bg-tertiary); }
+        .nav-item.active { background: #dbeafe; color: var(--accent); font-weight: 600; border-right: 4px solid var(--accent); }
 
-    --accent: #ff9800;
-    --accent-hover: #e68900;
+        /* Main */
+        .main { flex: 1; display: flex; flex-direction: column; }
+        .header { background: var(--bg-secondary); border-bottom: 1px solid var(--border); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .content { flex: 1; overflow-y: auto; padding: 30px; }
 
-    --text-primary: #e6e6e6;
-    --text-secondary: #b0b0b0;
-
-    --border: #3c3c3c;
-
-    --danger: #f44747;
-    --warning: #ffcc00;
-    --success: #4ec9b0;
-}
-
-:root[data-theme="light"] {
-    --bg-primary: #f3f3f3;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #eaeaea;
-
-    --accent: #ff9800;
-    --accent-hover: #e68900;
-
-    --text-primary: #1f1f1f;
-    --text-secondary: #555555;
-
-    --border: #d0d0d0;
-
-    --danger: #d32f2f;
-    --warning: #f9a825;
-    --success: #2e7d32;
-}
-
-/* ============================= */
-/*            BODY               */
-/* ============================= */
-
-body {
-    font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    height: 100vh;
-    overflow: hidden;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.container {
-    display: flex;
-    height: 100vh;
-}
-
-/* ============================= */
-/*            SIDEBAR             */
-/* ============================= */
-
-.sidebar {
-    width: 280px;
-    background: var(--bg-secondary);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
-.sidebar::-webkit-scrollbar {
-    width: 8px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: var(--bg-tertiary);
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: var(--accent);
-    border-radius: 4px;
-}
-
-.logo {
-    padding: 24px 20px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-tertiary);
-}
-
-.logo h1 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent);
-}
-
-.logo p {
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.theme-toggle {
-    margin-top: 8px;
-    padding: 8px 12px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 12px;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.theme-toggle:hover {
-    background: var(--bg-primary);
-    border-color: var(--accent);
-}
-
-.nav-section {
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.nav-title {
-    padding: 0 20px 10px;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.nav-item {
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 13px;
-    color: var(--text-secondary);
-    border-left: 3px solid transparent;
-}
-
-.nav-item:hover {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-}
-
-.nav-item.active {
-    background: var(--bg-tertiary);
-    color: var(--accent);
-    border-left-color: var(--accent);
-    font-weight: 600;
-}
-
-/* ============================= */
-/*            MAIN                */
-/* ============================= */
-
-.main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.header {
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border);
-    padding: 20px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header h2 {
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.status-badge {
-    background: var(--bg-tertiary);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 11px;
-    color: var(--success);
-    border: 1px solid var(--border);
-    display: flex;
-    gap: 6px;
-    align-items: center;
-}
-
-.status-badge::before {
-    content: "●";
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.3; }
-}
-
-.content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 30px;
-}
-
-/* ============================= */
-/*            CARDS               */
-/* ============================= */
-
-.tool {
-    display: none;
-    max-width: 1000px;
-    margin: auto;
-}
-
-.tool.active {
-    display: block;
-}
-
-.card {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 28px;
-    margin-bottom: 20px;
-}
-
-.card-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--accent);
-}
-
-.card-desc {
-    font-size: 14px;
-    color: var(--text-secondary);
-    border-left: 3px solid var(--accent);
-    padding-left: 12px;
-    margin: 12px 0 24px;
-}
-
-/* ============================= */
-/*            FORMS               */
-/* ============================= */
-
-label {
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    display: block;
-}
-
-input,
-textarea,
-select {
-    width: 100%;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border);
-    color: var(--text-primary);
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-family: 'Consolas', 'Fira Code', monospace;
-    font-size: 14px;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
-textarea {
-    min-height: 120px;
-}
-
-/* ============================= */
-/*            BUTTONS             */
-/* ============================= */
-
-.btn-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-button {
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border);
-    color: var(--text-primary);
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-button:hover {
-    border-color: var(--accent);
-}
-
-button.primary {
-    background: var(--accent);
-    color: #000;
-    border-color: var(--accent);
-}
-
-button.primary:hover {
-    background: var(--accent-hover);
-}
-
-button.danger {
-    border-color: var(--danger);
-    color: var(--danger);
-}
-
-button.danger:hover {
-    background: var(--danger);
-    color: #fff;
-}
-
-/* ============================= */
-/*          RESPONSIVE            */
-/* ============================= */
-
-@media (max-width: 968px) {
-    .container {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        max-height: 250px;
-    }
-
-    .content {
-        padding: 20px;
-    }
-}
-
- </style>
+        /* Tools */
+        .tool { display: none; max-width: 800px; margin: auto; }
+        .tool.active { display: block; }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; }
+        textarea, input, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-family: monospace; }
+        button { padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; transition: 0.2s; margin: 5px 2px; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-copy { background: var(--bg-tertiary); color: var(--text-primary); }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <div class="sidebar">
             <div class="logo">
                 <h1>⚡ Digital Entropy</h1>
-                <p>Cybersecurity Toolkit v2.0</p>
-                <button class="theme-toggle" onclick="toggleTheme()">
-                    <span id="theme-icon">🌙</span>
-                    <span id="theme-text">Dark Mode</span>
-                </button>
+                <p style="font-size: 11px; color: var(--text-secondary);">Cyber Toolkit - Light Edition</p>
             </div>
-
+            
             <div class="nav-section">
-                <div class="nav-title">🔐 Hash Functions</div>
-                <div class="nav-item" onclick="showTool('md5')">MD5</div>
-                <div class="nav-item" onclick="showTool('sha1')">SHA-1</div>
-                <div class="nav-item" onclick="showTool('sha256')">SHA-256</div>
-                <div class="nav-item" onclick="showTool('sha512')">SHA-512</div>
-                <div class="nav-item" onclick="showTool('sha3')">SHA-3</div>
-                <div class="nav-item" onclick="showTool('ripemd160')">RIPEMD-160</div>
+                <div class="nav-title">🔐 Hashes</div>
+                <div class="nav-item active" onclick="showTool('hash-tool')">Multi-Hash</div>
+                <div class="nav-item" onclick="showTool('hmac-tool')">HMAC Generator</div>
             </div>
 
             <div class="nav-section">
                 <div class="nav-title">🔒 Encryption</div>
                 <div class="nav-item" onclick="showTool('aes')">AES</div>
-                <div class="nav-item" onclick="showTool('des')">DES</div>
-                <div class="nav-item" onclick="showTool('tripledes')">Triple DES</div>
-                <div class="nav-item" onclick="showTool('rabbit')">Rabbit</div>
-                <div class="nav-item" onclick="showTool('rc4')">RC4</div>
                 <div class="nav-item" onclick="showTool('rsa')">RSA</div>
             </div>
 
             <div class="nav-section">
-                <div class="nav-title">📝 Encoding</div>
+                <div class="nav-title">📝 Encoding & Ciphers</div>
                 <div class="nav-item" onclick="showTool('base64')">Base64</div>
-                <div class="nav-item" onclick="showTool('base32')">Base32</div>
-                <div class="nav-item" onclick="showTool('hex')">Hex</div>
-                <div class="nav-item" onclick="showTool('binary')">Binary</div>
-                <div class="nav-item" onclick="showTool('ascii')">ASCII</div>
-                <div class="nav-item" onclick="showTool('url')">URL Encode</div>
-                <div class="nav-item" onclick="showTool('html')">HTML Entity</div>
-                <div class="nav-item" onclick="showTool('unicode')">Unicode</div>
+                <div class="nav-item" onclick="showTool('hex')">Hex / Binary</div>
+                <div class="nav-item" onclick="showTool('caesar')">Caesar / ROT13</div>
             </div>
 
             <div class="nav-section">
-                <div class="nav-title">🎯 Ciphers</div>
-                <div class="nav-item" onclick="showTool('caesar')">Caesar</div>
-                <div class="nav-item" onclick="showTool('vigenere')">Vigenère</div>
-                <div class="nav-item" onclick="showTool('rot13')">ROT13</div>
-                <div class="nav-item" onclick="showTool('atbash')">Atbash</div>
-                <div class="nav-item" onclick="showTool('morse')">Morse Code</div>
-                <div class="nav-item" onclick="showTool('bacon')">Bacon</div>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-title">🔑 HMAC</div>
-                <div class="nav-item" onclick="showTool('hmac-md5')">HMAC-MD5</div>
-                <div class="nav-item" onclick="showTool('hmac-sha1')">HMAC-SHA1</div>
-                <div class="nav-item" onclick="showTool('hmac-sha256')">HMAC-SHA256</div>
-                <div class="nav-item" onclick="showTool('hmac-sha512')">HMAC-SHA512</div>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-title">📊 Utilities</div>
-                <div class="nav-item" onclick="showTool('json')">JSON Format</div>
-                <div class="nav-item" onclick="showTool('jwt')">JWT Decode</div>
-                <div class="nav-item" onclick="showTool('uuid')">UUID Gen</div>
-                <div class="nav-item" onclick="showTool('password')">Password Gen</div>
-                <div class="nav-item" onclick="showTool('qr')">QR Code</div>
-                <div class="nav-item" onclick="showTool('color')">Color Picker</div>
-                <div class="nav-item" onclick="showTool('regex')">Regex Tester</div>
-                <div class="nav-item" onclick="showTool('diff')">Diff Checker</div>
-                <div class="nav-item" onclick="showTool('counter')">Word Counter</div>
+                <div class="nav-title">📊 Utils</div>
+                <div class="nav-item" onclick="showTool('passgen')">Password Gen</div>
+                <div class="nav-item" onclick="showTool('qr')">QR Generator</div>
             </div>
         </div>
 
-        <!-- Main Content -->
         <div class="main">
             <div class="header">
-                <h2 id="page-title">Welcome to Digital Entropy</h2>
-                <div class="status-badge">System Online</div>
+                <h2 id="page-title">Hash Generator</h2>
+                <span style="color: var(--success); font-size: 12px;">● Online</span>
             </div>
 
             <div class="content">
-                <!-- Welcome Screen -->
-                <div id="welcome" class="tool active">
-                    <div class="welcome">
-                        <h1>🛡️ Digital Entropy</h1>
-                        <p>Professional cybersecurity toolkit designed for CTF players, bug bounty hunters, and security researchers. All tools run client-side for maximum privacy.</p>
-                        <div class="feature-grid">
-                            <div class="feature-card">
-                                <h3>50+ Tools</h3>
-                                <p>Comprehensive collection of crypto, hash, and encoding tools</p>
-                            </div>
-                            <div class="feature-card">
-                                <h3>100% Client-Side</h3>
-                                <p>All processing in your browser, zero server communication</p>
-                            </div>
-                            <div class="feature-card">
-                                <h3>CTF Ready</h3>
-                                <p>Perfect for competitions and security challenges</p>
-                            </div>
-                            <div class="feature-card">
-                                <h3>Open Source</h3>
-                                <p>Free to use, modify, and share</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- MD5 Tool -->
-                <div id="md5" class="tool">
+                <div id="hash-tool" class="tool active">
                     <div class="card">
-                        <h3 class="card-title">MD5 Hash Generator</h3>
-                        <p class="card-desc">MD5 (Message Digest Algorithm 5) produces a 128-bit hash value. While not recommended for security purposes, it's still widely used for checksums and data integrity verification.</p>
+                        <h3>Multi-Hash Generator</h3>
                         <div class="input-group">
                             <label>Input Text</label>
-                            <textarea id="md5-in" placeholder="Enter text to hash..."></textarea>
+                            <textarea id="hash-in" placeholder="Metni buraya girin..."></textarea>
                         </div>
-                        <button class="primary" onclick="generateMD5()">🔑 Generate MD5</button>
                         <div class="input-group">
-                            <label>MD5 Hash Output</label>
-                            <input type="text" id="md5-out" readonly>
+                            <label>Algorithm</label>
+                            <select id="hash-algo">
+                                <option value="MD5">MD5</option>
+                                <option value="SHA1">SHA-1</option>
+                                <option value="SHA256">SHA-256</option>
+                                <option value="SHA512">SHA-512</option>
+                                <option value="SHA3">SHA-3</option>
+                                <option value="RIPEMD160">RIPEMD-160</option>
+                            </select>
                         </div>
-                        <button onclick="copyText('md5-out')">📋 Copy Hash</button>
-                    </div>
-                </div>
-
-                <!-- SHA-1 Tool -->
-                <div id="sha1" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">SHA-1 Hash Generator</h3>
-                        <p class="card-desc">SHA-1 produces a 160-bit (20-byte) hash value. Though considered cryptographically broken, it's still used in legacy systems and git commits.</p>
-                        <div class="input-group">
-                            <label>Input Text</label>
-                            <textarea id="sha1-in" placeholder="Enter text to hash..."></textarea>
-                        </div>
-                        <button class="primary" onclick="generateSHA1()">🔑 Generate SHA-1</button>
-                        <div class="input-group">
-                            <label>SHA-1 Hash Output</label>
-                            <input type="text" id="sha1-out" readonly>
-                        </div>
-                        <button onclick="copyText('sha1-out')">📋 Copy Hash</button>
-                    </div>
-                </div>
-
-                <!-- SHA-256 Tool -->
-                <div id="sha256" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">SHA-256 Hash Generator</h3>
-                        <p class="card-desc">SHA-256 is part of the SHA-2 family and produces a 256-bit hash. Widely used in blockchain, SSL certificates, and secure password storage.</p>
-                        <div class="input-group">
-                            <label>Input Text</label>
-                            <textarea id="sha256-in" placeholder="Enter text to hash..."></textarea>
-                        </div>
-                        <button class="primary" onclick="generateSHA256()">🔑 Generate SHA-256</button>
-                        <div class="input-group">
-                            <label>SHA-256 Hash Output</label>
-                            <input type="text" id="sha256-out" readonly>
-                        </div>
-                        <button onclick="copyText('sha256-out')">📋 Copy Hash</button>
-                    </div>
-                </div>
-
-                <!-- SHA-512 Tool -->
-                <div id="sha512" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">SHA-512 Hash Generator</h3>
-                        <p class="card-desc">SHA-512 produces a 512-bit hash value. Offers higher security than SHA-256 and is used in high-security applications.</p>
-                        <div class="input-group">
-                            <label>Input Text</label>
-                            <textarea id="sha512-in" placeholder="Enter text to hash..."></textarea>
-                        </div>
-                        <button class="primary" onclick="generateSHA512()">🔑 Generate SHA-512</button>
-                        <div class="input-group">
-                            <label>SHA-512 Hash Output</label>
-                            <textarea id="sha512-out" readonly style="height: 80px;"></textarea>
-                        </div>
-                        <button onclick="copyText('sha512-out')">📋 Copy Hash</button>
-                    </div>
-                </div>
-
-                <!-- Base64 Tool -->
-                <div id="base64" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">Base64 Encoder / Decoder</h3>
-                        <p class="card-desc">Base64 encoding converts binary data to ASCII text format using A-Z, a-z, 0-9, +, /. Essential for data transmission and API calls.</p>
-                        <div class="input-group">
-                            <label>Input</label>
-                            <textarea id="base64-in" placeholder="Enter text to encode/decode..."></textarea>
-                        </div>
-                        <div class="btn-group">
-                            <button class="primary" onclick="base64Encode()">Encode</button>
-                            <button class="primary" onclick="base64Decode()">Decode</button>
-                            <button class="danger" onclick="clearField('base64-in', 'base64-out')">Clear</button>
-                        </div>
+                        <button class="btn-primary" onclick="generateHash()">Generate Hash</button>
                         <div class="input-group">
                             <label>Output</label>
-                            <textarea id="base64-out" readonly></textarea>
+                            <input type="text" id="hash-out" readonly>
                         </div>
-                        <button onclick="copyText('base64-out')">📋 Copy</button>
+                        <button class="btn-copy" onclick="copy('hash-out')">📋 Copy</button>
                     </div>
                 </div>
 
-                <!-- AES Tool -->
-                <div id="aes" class="tool">
+                <div id="hmac-tool" class="tool">
                     <div class="card">
-                        <h3 class="card-title">AES Encryption / Decryption</h3>
-                        <p class="card-desc">Advanced Encryption Standard (AES) is a symmetric encryption algorithm. Industry standard for securing sensitive data.</p>
+                        <h3>HMAC Generator</h3>
                         <div class="input-group">
-                            <label>Secret Key (Password)</label>
-                            <input type="password" id="aes-key" placeholder="Enter encryption key...">
+                            <label>Key (Secret)</label>
+                            <input type="text" id="hmac-key" placeholder="Secret key...">
                         </div>
                         <div class="input-group">
                             <label>Message</label>
-                            <textarea id="aes-msg" placeholder="Enter message to encrypt/decrypt..."></textarea>
+                            <textarea id="hmac-in" placeholder="Message..."></textarea>
                         </div>
-                        <div class="btn-group">
-                            <button class="primary" onclick="aesEncrypt()">🔒 Encrypt</button>
-                            <button class="primary" onclick="aesDecrypt()">🔓 Decrypt</button>
+                        <div class="input-group">
+                            <label>Algorithm</label>
+                            <select id="hmac-algo">
+                                <option value="HmacSHA256">HMAC-SHA256</option>
+                                <option value="HmacSHA512">HMAC-SHA512</option>
+                                <option value="HmacMD5">HMAC-MD5</option>
+                            </select>
                         </div>
+                        <button class="btn-primary" onclick="generateHMAC()">Generate HMAC</button>
+                        <div class="input-group">
+                            <label>Result</label>
+                            <input type="text" id="hmac-out" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="aes" class="tool">
+                    <div class="card">
+                        <h3>AES Symmetric Encryption</h3>
+                        <div class="input-group">
+                            <label>Key</label>
+                            <input type="text" id="aes-key" placeholder="Secret key...">
+                        </div>
+                        <div class="input-group">
+                            <label>Text</label>
+                            <textarea id="aes-in"></textarea>
+                        </div>
+                        <button class="btn-primary" onclick="aesAction('encrypt')">Encrypt</button>
+                        <button class="btn-primary" onclick="aesAction('decrypt')">Decrypt</button>
                         <div class="input-group">
                             <label>Result</label>
                             <textarea id="aes-out" readonly></textarea>
                         </div>
-                        <button onclick="copyText('aes-out')">📋 Copy</button>
                     </div>
                 </div>
 
-                <!-- RSA Tool -->
+                <div id="base64" class="tool">
+                    <div class="card">
+                        <h3>Base64 Encoder/Decoder</h3>
+                        <textarea id="b64-in" style="height:100px;"></textarea>
+                        <div style="margin-top:10px;">
+                            <button class="btn-primary" onclick="base64(true)">Encode</button>
+                            <button class="btn-primary" onclick="base64(false)">Decode</button>
+                        </div>
+                        <textarea id="b64-out" readonly style="margin-top:15px;"></textarea>
+                    </div>
+                </div>
+
                 <div id="rsa" class="tool">
                     <div class="card">
-                        <h3 class="card-title">RSA Encryption / Decryption</h3>
-                        <p class="card-desc">RSA is an asymmetric cryptographic algorithm using public/private key pairs. Foundation of modern secure communications.</p>
-                        <div class="input-group">
-                            <label>Key Size</label>
-                            <select id="rsa-size">
-                                <option value="512">512 bits</option>
-                                <option value="1024" selected>1024 bits</option>
-                                <option value="2048">2048 bits</option>
-                            </select>
-                        </div>
-                        <button class="primary" onclick="generateRSA()">🔑 Generate Key Pair</button>
+                        <h3>RSA Asymmetric</h3>
+                        <button class="btn-primary" onclick="genRSA()">Generate 1024-bit Keys</button>
                         <div class="input-group">
                             <label>Public Key</label>
-                            <textarea id="rsa-public" readonly style="height: 100px;"></textarea>
+                            <textarea id="rsa-pub" readonly style="height:60px; font-size:10px;"></textarea>
                         </div>
                         <div class="input-group">
                             <label>Private Key</label>
-                            <textarea id="rsa-private" readonly style="height: 100px;"></textarea>
+                            <textarea id="rsa-priv" readonly style="height:60px; font-size:10px;"></textarea>
                         </div>
-                        <div class="input-group">
-                            <label>Message</label>
-                            <textarea id="rsa-msg" placeholder="Enter message..."></textarea>
-                        </div>
-                        <div class="btn-group">
-                            <button class="primary" onclick="rsaEncrypt()">🔒 Encrypt</button>
-                            <button class="primary" onclick="rsaDecrypt()">🔓 Decrypt</button>
-                        </div>
-                        <div class="input-group">
-                            <label>Result</label>
-                            <textarea id="rsa-out" readonly></textarea>
-                        </div>
-                        <button onclick="copyText('rsa-out')">📋 Copy</button>
+                        <input type="text" id="rsa-msg" placeholder="Message to encrypt...">
+                        <button class="btn-primary" onclick="rsaRun()">Run Test (Encrypt + Decrypt)</button>
+                        <div id="rsa-res" style="margin-top:10px; font-size:12px; color:var(--accent);"></div>
                     </div>
                 </div>
 
-                <!-- URL Encode Tool -->
-                <div id="url" class="tool">
+                <div id="passgen" class="tool">
                     <div class="card">
-                        <h3 class="card-title">URL Encoder / Decoder</h3>
-                        <p class="card-desc">Percent-encoding for safe URL transmission. Converts special characters to %XX format.</p>
-                        <div class="input-group">
-                            <label>Input</label>
-                            <textarea id="url-in" placeholder="https://example.com/?q=hello world"></textarea>
-                        </div>
-                        <div class="btn-group">
-                            <button class="primary" onclick="urlEncode()">Encode</button>
-                            <button class="primary" onclick="urlDecode()">Decode</button>
-                        </div>
-                        <div class="input-group">
-                            <label>Output</label>
-                            <textarea id="url-out" readonly></textarea>
-                        </div>
-                        <button onclick="copyText('url-out')">📋 Copy</button>
+                        <h3>Password Generator</h3>
+                        <input type="number" id="pass-len" value="16" min="4" max="64">
+                        <button class="btn-primary" onclick="generatePassword()">Generate</button>
+                        <input type="text" id="pass-out" readonly style="margin-top:10px; text-align:center;">
                     </div>
                 </div>
 
-                <!-- Hex Tool -->
-                <div id="hex" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">Hexadecimal Converter</h3>
-                        <p class="card-desc">Convert between text and hex (base-16) representation. Essential for low-level debugging and binary analysis.</p>
-                        <div class="input-group">
-                            <label>Input</label>
-                            <textarea id="hex-in" placeholder="Text or hex..."></textarea>
-                        </div>
-                        <div class="btn-group">
-                            <button class="primary" onclick="textToHex()">Text → Hex</button>
-                            <button class="primary" onclick="hexToText()">Hex → Text</button>
-                        </div>
-                        <div class="input-group">
-                            <label>Output</label>
-                            <textarea id="hex-out" readonly></textarea>
-                        </div>
-                        <button onclick="copyText('hex-out')">📋 Copy</button>
-                    </div>
-                </div>
-
-                <!-- Binary Tool -->
-                <div id="binary" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">Binary Converter</h3>
-                        <p class="card-desc">Convert text to binary (0s and 1s) and vice versa. Understand how computers store data at the lowest level.</p>
-                        <div class="input-group">
-                            <label>Input</label>
-                            <textarea id="binary-in" placeholder="Text or binary..."></textarea>
-                        </div>
-                        <div class="btn-group">
-                            <button class="primary" onclick="textToBinary()">Text → Binary</button>
-                            <button class="primary" onclick="binaryToText()">Binary → Text</button>
-                        </div>
-                        <div class="input-group">
-                            <label>Output</label>
-                            <textarea id="binary-out" readonly></textarea>
-                        </div>
-                        <button onclick="copyText('binary-out')">📋 Copy</button>
-                    </div>
-                </div>
-
-                <!-- Caesar Cipher Tool -->
-                <div id="caesar" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">Caesar Cipher</h3>
-                        <p class="card-desc">Classic substitution cipher that shifts each letter by a fixed number of positions. Named after Julius Caesar.</p>
-                        <div class="input-group">
-                            <label>Input</label>
-                            <textarea id="caesar-in" placeholder="Enter text..."></textarea>
-                        </div>
-                        <div class="input-group">
-                            <label>Shift Amount (1-25)</label>
-                            <input type="number" id="caesar-shift" value="3" min="1" max="25">
-                        </div>
-                        <div class="btn-group">
-                            <button class="primary" onclick="caesarEncrypt()">Encrypt</button>
-                            <button class="primary" onclick="caesarDecrypt()">Decrypt</button>
-                        </div>
-                        <div class="input-group">
-                            <label>Output</label>
-                            <textarea id="caesar-out" readonly></textarea>
-                        </div>
-                        <button onclick="copyText('caesar-out')">📋 Copy</button>
-                    </div>
-                </div>
-
-                <!-- ROT13 Tool -->
-                <div id="rot13" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">ROT13 Cipher</h3>
-                        <p class="card-desc">Special case of Caesar cipher with shift of 13. Applying ROT13 twice returns the original text.</p>
-                        <div class="input-group">
-                            <label>Input</label>
-                            <textarea id="rot13-in" placeholder="Enter text..."></textarea>
-                        </div>
-                        <button class="primary" onclick="rot13Transform()">Transform</button>
-                        <div class="input-group">
-                            <label>Output</label>
-                            <textarea id="rot13-out" readonly></textarea>
-                        </div>
-                        <button onclick="copyText('rot13-out')">📋 Copy</button>
-                    </div>
-                </div>
-
-                <!-- Morse Code Tool -->
-                <div id="morse" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">Morse Code Translator</h3>
-                        <p class="card-desc">Convert text to Morse code (dots and dashes) and vice versa. Telegraph communication system invented in 1830s.</p>
-                        <div class="input-group">
-                            <label>Input</label>
-                            <textarea id="morse-in" placeholder="Text or morse code..."></textarea>
-                        </div>
-                        <div class="btn-group">
-                            <button class="primary" onclick="textToMorse()">Text → Morse</button>
-                            <button class="primary" onclick="morseToText()">Morse → Text</button>
-                        </div>
-                        <div class="input-group">
-                            <label>Output</label>
-                            <textarea id="morse-out" readonly></textarea>
-                        </div>
-                        <button onclick="copyText('morse-out')">📋 Copy</button>
-                    </div>
-                </div>
-
-                <!-- JSON Formatter Tool -->
-                <div id="json" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">JSON Formatter & Validator</h3>
-                        <p class="card-desc">Format, minify, and validate JSON data. Essential for API development and debugging.</p>
-                        <div class="input-group">
-                            <label>JSON Input</label>
-                            <textarea id="json-in" placeholder='{"key": "value"}'></textarea>
-                        </div>
-                        <div class="btn-group">
-                            <button class="primary" onclick="jsonFormat()">Format</button>
-                            <button class="primary" onclick="jsonMinify()">Minify</button>
-                            <button class="primary" onclick="jsonValidate()">Validate</button>
-                        </div>
-                        <div class="input-group">
-                            <label>Output</label>
-                            <textarea id="json-out" readonly style="min-height: 200px;"></textarea>
-                        </div>
-                        <button onclick="copyText('json-out')">📋 Copy</button>
-                    </div>
-                </div>
-
-                <!-- UUID Generator Tool -->
-                <div id="uuid" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">UUID Generator (v4)</h3>
-                        <p class="card-desc">Generate universally unique identifiers. Perfect for database keys and unique session IDs.</p>
-                        <div class="input-group">
-                            <label>Number of UUIDs</label>
-                            <input type="number" id="uuid-count" value="5" min="1" max="100">
-                        </div>
-                        <button class="primary" onclick="generateUUID()">🎲 Generate UUIDs</button>
-                        <div class="input-group">
-                            <label>Generated UUIDs</label>
-                            <textarea id="uuid-out" readonly style="height: 200px;"></textarea>
-                        </div>
-                        <button onclick="copyText('uuid-out')">📋 Copy All</button>
-                    </div>
-                </div>
-
-                <!-- Password Generator Tool -->
-                <div id="password" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">Secure Password Generator</h3>
-                        <p class="card-desc">Generate cryptographically strong passwords. Customize length and character types for maximum security.</p>
-                        <div class="input-group">
-                            <label>Password Length: <span id="pass-len-display">16</span></label>
-                            <input type="range" id="pass-len" min="8" max="64" value="16" oninput="updatePassLen()">
-                        </div>
-                        <div class="input-group">
-                            <label><input type="checkbox" id="pass-upper" checked> Uppercase (A-Z)</label>
-                            <label><input type="checkbox" id="pass-lower" checked> Lowercase (a-z)</label>
-                            <label><input type="checkbox" id="pass-numbers" checked> Numbers (0-9)</label>
-                            <label><input type="checkbox" id="pass-symbols" checked> Symbols (!@#$%)</label>
-                        </div>
-                        <button class="primary" onclick="generatePassword()">🔐 Generate Password</button>
-                        <div class="input-group">
-                            <label>Generated Password</label>
-                            <input type="text" id="pass-out" readonly style="font-size: 18px; text-align: center; letter-spacing: 1px;">
-                        </div>
-                        <button onclick="copyText('pass-out')">📋 Copy Password</button>
-                    </div>
-                </div>
-
-                <!-- QR Code Tool -->
                 <div id="qr" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">QR Code Generator</h3>
-                        <p class="card-desc">Create QR codes for URLs, text, WiFi credentials, and more. Scannable by any smartphone camera.</p>
-                        <div class="input-group">
-                            <label>Text / URL</label>
-                            <input type="text" id="qr-in" placeholder="https://example.com">
-                        </div>
-                        <button class="primary" onclick="generateQR()">📱 Generate QR Code</button>
-                        <div id="qrcode" style="margin: 20px auto; text-align: center;"></div>
+                    <div class="card" style="text-align:center;">
+                        <h3>QR Code Generator</h3>
+                        <input type="text" id="qr-in" placeholder="URL or text...">
+                        <button class="btn-primary" onclick="makeQR()">Generate QR</button>
+                        <div id="qr-result" style="margin-top:20px; display: flex; justify-content: center;"></div>
                     </div>
                 </div>
-
-                <!-- Regex Tester Tool -->
-                <div id="regex" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">Regular Expression Tester</h3>
-                        <p class="card-desc">Test and debug regex patterns. Real-time matching with flags support (g, i, m).</p>
-                        <div class="input-group">
-                            <label>Regex Pattern</label>
-                            <input type="text" id="regex-pattern" placeholder="^[a-zA-Z0-9]+$">
-                        </div>
-                        <div class="input-group">
-                            <label>Test String</label>
-                            <textarea id="regex-test" placeholder="Enter text to test against regex..."></textarea>
-                        </div>
-                        <button class="primary" onclick="testRegex()">🔍 Test Pattern</button>
-                        <div class="input-group">
-                            <label>Matches</label>
-                            <textarea id="regex-out" readonly style="height: 150px;"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word Counter Tool -->
-                <div id="counter" class="tool">
-                    <div class="card">
-                        <h3 class="card-title">Word & Character Counter</h3>
-                        <p class="card-desc">Real-time statistics for your text. Perfect for essays, tweets, and content optimization.</p>
-                        <div class="input-group">
-                            <label>Input Text</label>
-                            <textarea id="counter-in" oninput="updateCounter()" placeholder="Type or paste your text here..."></textarea>
-                        </div>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-top: 20px;">
-                            <div class="info-box">
-                                <strong>Words:</strong> <span id="word-count">0</span>
-                            </div>
-                            <div class="info-box">
-                                <strong>Characters:</strong> <span id="char-count">0</span>
-                            </div>
-                            <div class="info-box">
-                                <strong>No Spaces:</strong> <span id="char-no-space">0</span>
-                            </div>
-                            <div class="info-box">
-                                <strong>Lines:</strong> <span id="line-count">0</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
 
     <script>
-        // Theme Management
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            const icon = document.getElementById('theme-icon');
-            const text = document.getElementById('theme-text');
-            if (theme === 'dark') {
-                icon.textContent = '🌙';
-                text.textContent = 'Dark Mode';
-            } else {
-                icon.textContent = '☀️';
-                text.textContent = 'Light Mode';
-            }
-        }
-
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            setTheme(current === 'dark' ? 'light' : 'dark');
-        }
-
-        // Initialize theme
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        setTheme(savedTheme);
-
-        // Tool Navigation
-        function showTool(toolId) {
+        // Navigasyon
+        function showTool(id) {
             document.querySelectorAll('.tool').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('page-title').innerText = id.toUpperCase().replace('-', ' ');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Kopyalama
+        function copy(id) {
+            const el = document.getElementById(id);
+            el.select();
+            document.execCommand('copy');
+            alert("Kopyalandı!");
+        }
+
+        // Hash Fonksiyonları (CryptoJS Kullanarak)
+        function generateHash() {
+            const input = document.getElementById('hash-in').value;
+            const algo = document.getElementById('hash-algo').value;
+            if(!input) return;
             
-            const tool = document.getElementById(toolId);
-            if (tool) {
-                tool.classList.add('active');
-                const navItem = Array.from(document.querySelectorAll('.nav-item')).find(
-                    n => n.textContent.trim().toLowerCase().includes(toolId.toLowerCase().replace('-', ' '))
-                );
-                if (navItem) navItem.classList.add('active');
-                
-                const titles = {
-                    'welcome': 'Welcome',
-                    'md5': 'MD5 Hash',
-                    'sha1': 'SHA-1 Hash',
-                    'sha256': 'SHA-256 Hash',
-                    'sha512': 'SHA-512 Hash',
-                    'base64': 'Base64 Encode/Decode',
-                    'aes': 'AES Encryption',
-                    'rsa': 'RSA Encryption',
-                    'url': 'URL Encode/Decode',
-                    'hex': 'Hexadecimal',
-                    'binary': 'Binary Converter',
-                    'caesar': 'Caesar Cipher',
-                    'rot13': 'ROT13',
-                    'morse': 'Morse Code',
-                    'json': 'JSON Tools',
-                    'uuid': 'UUID Generator',
-                    'password': 'Password Generator',
-                    'qr': 'QR Code Generator',
-                    'regex': 'Regex Tester',
-                    'counter': 'Word Counter'
-                };
-                document.getElementById('page-title').textContent = titles[toolId] || toolId.toUpperCase();
+            let hash;
+            switch(algo) {
+                case 'MD5': hash = CryptoJS.MD5(input); break;
+                case 'SHA1': hash = CryptoJS.SHA1(input); break;
+                case 'SHA256': hash = CryptoJS.SHA256(input); break;
+                case 'SHA512': hash = CryptoJS.SHA512(input); break;
+                case 'SHA3': hash = CryptoJS.SHA3(input); break;
+                case 'RIPEMD160': hash = CryptoJS.RIPEMD160(input); break;
             }
+            document.getElementById('hash-out').value = hash.toString();
         }
 
-        // Utility Functions
-        function copyText(elementId) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                element.select();
-                document.execCommand('copy');
-                alert('📋 Copied to clipboard!');
-            }
+        // HMAC
+        function generateHMAC() {
+            const key = document.getElementById('hmac-key').value;
+            const msg = document.getElementById('hmac-in').value;
+            const algo = document.getElementById('hmac-algo').value;
+            if(!key || !msg) return alert("Key ve Message gerekli!");
+
+            const hmac = CryptoJS[algo](msg, key);
+            document.getElementById('hmac-out').value = hmac.toString();
         }
 
-        function clearField(...ids) {
-            ids.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = '';
-            });
-        }
+        // AES
+        function aesAction(type) {
+            const key = document.getElementById('aes-key').value;
+            const input = document.getElementById('aes-in').value;
+            if(!key || !input) return;
 
-        // Hash Functions
-        function generateMD5() {
-            const input = document.getElementById('md5-in').value;
-            if (input && typeof md5 !== 'undefined') {
-                document.getElementById('md5-out').value = md5(input);
-            }
-        }
-
-        function generateSHA1() {
-            const input = document.getElementById('sha1-in').value;
-            if (input && typeof sha1 !== 'undefined') {
-                document.getElementById('sha1-out').value = sha1(input);
-            }
-        }
-
-        function generateSHA256() {
-            const input = document.getElementById('sha256-in').value;
-            if (input && typeof sha256 !== 'undefined') {
-                document.getElementById('sha256-out').value = sha256(input);
-            }
-        }
-
-        function generateSHA512() {
-            const input = document.getElementById('sha512-in').value;
-            if (input && typeof sha512 !== 'undefined') {
-                document.getElementById('sha512-out').value = sha512(input);
+            if(type === 'encrypt') {
+                document.getElementById('aes-out').value = CryptoJS.AES.encrypt(input, key).toString();
+            } else {
+                try {
+                    const bytes = CryptoJS.AES.decrypt(input, key);
+                    document.getElementById('aes-out').value = bytes.toString(CryptoJS.enc.Utf8);
+                } catch(e) { alert("Hatalı Key!"); }
             }
         }
 
         // Base64
-        function base64Encode() {
-            const input = document.getElementById('base64-in').value;
-            try {
-                document.getElementById('base64-out').value = btoa(unescape(encodeURIComponent(input)));
-            } catch (e) {
-                alert('Error encoding: ' + e.message);
-            }
-        }
-
-        function base64Decode() {
-            const input = document.getElementById('base64-in').value;
-            try {
-                document.getElementById('base64-out').value = decodeURIComponent(escape(atob(input)));
-            } catch (e) {
-                alert('Error decoding: Invalid Base64');
-            }
-        }
-
-        // AES
-        function aesEncrypt() {
-            const key = document.getElementById('aes-key').value;
-            const msg = document.getElementById('aes-msg').value;
-            if (!key || !msg) return alert('Please enter both key and message');
-            try {
-                const encrypted = CryptoJS.AES.encrypt(msg, key).toString();
-                document.getElementById('aes-out').value = encrypted;
-            } catch (e) {
-                alert('Encryption error: ' + e.message);
-            }
-        }
-
-        function aesDecrypt() {
-            const key = document.getElementById('aes-key').value;
-            const msg = document.getElementById('aes-msg').value;
-            if (!key || !msg) return alert('Please enter both key and encrypted message');
-            try {
-                const decrypted = CryptoJS.AES.decrypt(msg, key).toString(CryptoJS.enc.Utf8);
-                document.getElementById('aes-out').value = decrypted || 'Decryption failed - wrong key or invalid data';
-            } catch (e) {
-                alert('Decryption error: ' + e.message);
+        function base64(isEncode) {
+            const input = document.getElementById('b64-in').value;
+            if(isEncode) {
+                document.getElementById('b64-out').value = btoa(input);
+            } else {
+                try { document.getElementById('b64-out').value = atob(input); } 
+                catch(e) { alert("Geçersiz Base64!"); }
             }
         }
 
         // RSA
-        let rsaKeys = { public: null, private: null };
-
-        function generateRSA() {
-            const size = document.getElementById('rsa-size').value;
-            const crypt = new JSEncrypt({ default_key_size: size });
-            rsaKeys.public = crypt.getPublicKey();
-            rsaKeys.private = crypt.getPrivateKey();
-            document.getElementById('rsa-public').value = rsaKeys.public;
-            document.getElementById('rsa-private').value = rsaKeys.private;
+        let crypt = new JSEncrypt();
+        function genRSA() {
+            crypt = new JSEncrypt({default_key_size: 1024});
+            document.getElementById('rsa-pub').value = crypt.getPublicKey();
+            document.getElementById('rsa-priv').value = crypt.getPrivateKey();
         }
 
-        function rsaEncrypt() {
-            if (!rsaKeys.public) return alert('Generate keys first!');
+        function rsaRun() {
             const msg = document.getElementById('rsa-msg').value;
-            if (!msg) return alert('Enter a message');
-            const encrypt = new JSEncrypt();
-            encrypt.setPublicKey(rsaKeys.public);
-            const encrypted = encrypt.encrypt(msg);
-            document.getElementById('rsa-out').value = encrypted || 'Encryption failed';
+            if(!msg) return;
+            const enc = crypt.encrypt(msg);
+            const dec = crypt.decrypt(enc);
+            document.getElementById('rsa-res').innerHTML = `<b>Enc:</b> ${enc.substring(0,20)}... <br><b>Dec:</b> ${dec}`;
         }
 
-        function rsaDecrypt() {
-            if (!rsaKeys.private) return alert('Generate keys first!');
-            const msg = document.getElementById('rsa-msg').value;
-            if (!msg) return alert('Enter encrypted message');
-            const decrypt = new JSEncrypt();
-            decrypt.setPrivateKey(rsaKeys.private);
-            const decrypted = decrypt.decrypt(msg);
-            document.getElementById('rsa-out').value = decrypted || 'Decryption failed';
-        }
-
-        // URL Encode/Decode
-        function urlEncode() {
-            const input = document.getElementById('url-in').value;
-            document.getElementById('url-out').value = encodeURIComponent(input);
-        }
-
-        function urlDecode() {
-            const input = document.getElementById('url-in').value;
-            try {
-                document.getElementById('url-out').value = decodeURIComponent(input);
-            } catch (e) {
-                alert('Invalid URL encoding');
-            }
-        }
-
-        // Hex
-        function textToHex() {
-            const input = document.getElementById('hex-in').value;
-            let hex = '';
-            for (let i = 0; i < input.length; i++) {
-                hex += input.charCodeAt(i).toString(16).padStart(2, '0');
-            }
-            document.getElementById('hex-out').value = hex;
-        }
-
-        function hexToText() {
-            const input = document.getElementById('hex-in').value.replace(/\s/g, '');
-            try {
-                let text = '';
-                for (let i = 0; i < input.length; i += 2) {
-                    text += String.fromCharCode(parseInt(input.substr(i, 2), 16));
-                }
-                document.getElementById('hex-out').value = text;
-            } catch (e) {
-                alert('Invalid hex string');
-            }
-        }
-
-        // Binary
-        function textToBinary() {
-            const input = document.getElementById('binary-in').value;
-            const binary = input.split('').map(c => 
-                c.charCodeAt(0).toString(2).padStart(8, '0')
-            ).join(' ');
-            document.getElementById('binary-out').value = binary;
-        }
-
-        function binaryToText() {
-            const input = document.getElementById('binary-in').value.replace(/\s/g, '');
-            try {
-                const text = input.match(/.{1,8}/g).map(bin => 
-                    String.fromCharCode(parseInt(bin, 2))
-                ).join('');
-                document.getElementById('binary-out').value = text;
-            } catch (e) {
-                alert('Invalid binary string');
-            }
-        }
-
-        // Caesar Cipher
-        function caesarEncrypt() {
-            const input = document.getElementById('caesar-in').value;
-            const shift = parseInt(document.getElementById('caesar-shift').value);
-            const result = input.replace(/[a-zA-Z]/g, c => {
-                const base = c <= 'Z' ? 65 : 97;
-                return String.fromCharCode((c.charCodeAt(0) - base + shift) % 26 + base);
-            });
-            document.getElementById('caesar-out').value = result;
-        }
-
-        function caesarDecrypt() {
-            const input = document.getElementById('caesar-in').value;
-            const shift = parseInt(document.getElementById('caesar-shift').value);
-            const result = input.replace(/[a-zA-Z]/g, c => {
-                const base = c <= 'Z' ? 65 : 97;
-                return String.fromCharCode((c.charCodeAt(0) - base - shift + 26) % 26 + base);
-            });
-            document.getElementById('caesar-out').value = result;
-        }
-
-        // ROT13
-        function rot13Transform() {
-            const input = document.getElementById('rot13-in').value;
-            const result = input.replace(/[a-zA-Z]/g, c => {
-                return String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26);
-            });
-            document.getElementById('rot13-out').value = result;
-        }
-
-        // Morse Code
-        const morseCode = {
-            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
-            'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
-            'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
-            'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
-            'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---',
-            '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...',
-            '8': '---..', '9': '----.', ' ': '/'
-        };
-        const morseReverse = Object.fromEntries(Object.entries(morseCode).map(([k, v]) => [v, k]));
-
-        function textToMorse() {
-            const input = document.getElementById('morse-in').value.toUpperCase();
-            const result = input.split('').map(c => morseCode[c] || c).join(' ');
-            document.getElementById('morse-out').value = result;
-        }
-
-        function morseToText() {
-            const input = document.getElementById('morse-in').value;
-            const result = input.split(' ').map(m => morseReverse[m] || m).join('');
-            document.getElementById('morse-out').value = result;
-        }
-
-        // JSON
-        function jsonFormat() {
-            const input = document.getElementById('json-in').value;
-            try {
-                const formatted = JSON.stringify(JSON.parse(input), null, 4);
-                document.getElementById('json-out').value = formatted;
-            } catch (e) {
-                alert('Invalid JSON: ' + e.message);
-            }
-        }
-
-        function jsonMinify() {
-            const input = document.getElementById('json-in').value;
-            try {
-                const minified = JSON.stringify(JSON.parse(input));
-                document.getElementById('json-out').value = minified;
-            } catch (e) {
-                alert('Invalid JSON: ' + e.message);
-            }
-        }
-
-        function jsonValidate() {
-            const input = document.getElementById('json-in').value;
-            try {
-                JSON.parse(input);
-                alert('✅ Valid JSON!');
-            } catch (e) {
-                alert('❌ Invalid JSON: ' + e.message);
-            }
-        }
-
-        // UUID
-        function generateUUID() {
-            const count = parseInt(document.getElementById('uuid-count').value);
-            let result = '';
-            for (let i = 0; i < count; i++) {
-                result += 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-                    const r = Math.random() * 16 | 0;
-                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                    return v.toString(16);
-                }) + '\n';
-            }
-            document.getElementById('uuid-out').value = result;
-        }
-
-        // Password Generator
-        function updatePassLen() {
-            const len = document.getElementById('pass-len').value;
-            document.getElementById('pass-len-display').textContent = len;
-        }
-
+        // Password Gen
         function generatePassword() {
-            const len = parseInt(document.getElementById('pass-len').value);
-            const upper = document.getElementById('pass-upper').checked;
-            const lower = document.getElementById('pass-lower').checked;
-            const numbers = document.getElementById('pass-numbers').checked;
-            const symbols = document.getElementById('pass-symbols').checked;
-
-            let chars = '';
-            if (upper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            if (lower) chars += 'abcdefghijklmnopqrstuvwxyz';
-            if (numbers) chars += '0123456789';
-            if (symbols) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
-
-            if (!chars) return alert('Select at least one character type!');
-
-            let password = '';
-            for (let i = 0; i < len; i++) {
-                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            const len = document.getElementById('pass-len').value;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            let retVal = "";
+            for (let i = 0; i < len; ++i) {
+                retVal += charset.charAt(Math.floor(Math.random() * charset.length));
             }
-            document.getElementById('pass-out').value = password;
+            document.getElementById('pass-out').value = retVal;
         }
 
         // QR Code
-        function generateQR() {
-            const input = document.getElementById('qr-in').value;
-            if (!input) return alert('Enter text or URL');
-            
-            const container = document.getElementById('qrcode');
-            container.innerHTML = '';
-            
-            new QRCode(container, {
-                text: input,
-                width: 200,
-                height: 200,
-                colorDark: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
-                colorLight: getComputedStyle(document.documentElement).getPropertyValue('--bg-primary'),
-            });
+        function makeQR() {
+            const val = document.getElementById('qr-in').value;
+            const container = document.getElementById('qr-result');
+            container.innerHTML = "";
+            if(!val) return;
+            new QRCode(container, { text: val, width: 128, height: 128 });
         }
-
-        // Regex Tester
-        function testRegex() {
-            const pattern = document.getElementById('regex-pattern').value;
-            const test = document.getElementById('regex-test').value;
-            
-            try {
-                const regex = new RegExp(pattern, 'g');
-                const matches = test.match(regex);
-                
-                if (matches) {
-                    document.getElementById('regex-out').value = 
-                        `Found ${matches.length} match(es):\n\n` + 
-                        matches.map((m, i) => `${i + 1}. ${m}`).join('\n');
-                } else {
-                    document.getElementById('regex-out').value = 'No matches found';
-                }
-            } catch (e) {
-                alert('Invalid regex: ' + e.message);
-            }
-        }
-
-        // Word Counter
-        function updateCounter() {
-            const text = document.getElementById('counter-in').value;
-            
-            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-            const chars = text.length;
-            const noSpace = text.replace(/\s/g, '').length;
-            const lines = text.split(/\r\n|\r|\n/).length;
-            
-            document.getElementById('word-count').textContent = words;
-            document.getElementById('char-count').textContent = chars;
-            document.getElementById('char-no-space').textContent = noSpace;
-            document.getElementById('line-count').textContent = lines;
-        }
-
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', () => {
-            showTool('welcome');
-        });
     </script>
 </body>
 </html>
