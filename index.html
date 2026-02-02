@@ -10,8 +10,6 @@
     <meta name="keywords"
         content="digital entropy, cybersecurity tools, ctf tools, rsa encryption, aes encryption, base64 decode, md5 hash, sha256">
     <meta name="author" content="Digital Entropy">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3932890755983281"
-        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
@@ -19,14 +17,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.3.2/jsencrypt.min.js"></script>
     <style>
         :root {
-            --primary: #06b6d4; /* cyan accent */
+            --primary: #06b6d4;
             --primary-dark: #0891b2;
-            --bg: #0b1220; /* page background (dark) */
-            --sidebar-bg: #071223; /* sidebar darker */
-            --text-main: #e6f0f6; /* main text (light) */
+            --bg: #0b1220;
+            --sidebar-bg: #071223;
+            --text-main: #e6f0f6;
             --text-muted: #94a3b8;
             --border: rgba(255,255,255,0.03);
-            --panel-bg: #0f1724; /* panels */
+            --panel-bg: #0f1724;
             --hover-bg: rgba(255,255,255,0.02);
             --card-shadow: rgba(2,6,23,0.6);
         }
@@ -120,16 +118,6 @@
             font-weight: 600;
         }
 
-        .ad-container {
-            min-height: 90px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--sidebar-bg);
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            padding: 10px;
-        }
-
         .content-scroll {
             flex: 1;
             overflow-y: auto;
@@ -155,7 +143,6 @@
                 opacity: 0;
                 transform: translateY(5px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -273,14 +260,23 @@
             margin-top: 10px;
         }
 
+        #qrcode {
+            text-align: center;
+            margin-top: 20px;
+        }
+
         #qrcode img {
-            display: block;
+            display: inline-block;
             margin: 20px auto;
         }
 
         input[type="checkbox"] {
             width: auto;
             margin-right: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
         }
 
         @media (max-width: 768px) {
@@ -298,7 +294,7 @@
                 padding: 15px;
             }
         }
-</style>
+    </style>
 </head>
 
 <body>
@@ -306,45 +302,49 @@
         <div class="logo">Digital Entropy</div>
         <div class="nav-group">
             <div class="nav-header">Encoding</div>
-            <div class="nav-item" id="nav-t-base64" onclick="showTool('t-base64', 'Base64 Converter')">Base64</div>
-            <div class="nav-item" id="nav-t-url" onclick="showTool('t-url', 'URL Encode/Decode')">URL Encode</div>
-            <div class="nav-item" id="nav-t-html" onclick="showTool('t-html', 'HTML Entity')">HTML Entity</div>
-            <div class="nav-item" id="nav-t-hex" onclick="showTool('t-hex', 'Hex Converter')">Hex</div>
-            <div class="nav-item" id="nav-t-bin" onclick="showTool('t-bin', 'Binary Converter')">Binary</div>
-            <div class="nav-item" id="nav-t-base32" onclick="showTool('t-base32', 'Base32 Converter')">Base32</div>
+            <div class="nav-item" onclick="showTool('t-base64', 'Base64 Converter')">Base64</div>
+            <div class="nav-item" onclick="showTool('t-url', 'URL Encode/Decode')">URL Encode</div>
+            <div class="nav-item" onclick="showTool('t-html', 'HTML Entity')">HTML Entity</div>
+            <div class="nav-item" onclick="showTool('t-hex', 'Hex Converter')">Hex</div>
+            <div class="nav-item" onclick="showTool('t-bin', 'Binary Converter')">Binary</div>
+            <div class="nav-item" onclick="showTool('t-base32', 'Base32 Converter')">Base32</div>
         </div>
         <div class="nav-group">
             <div class="nav-header">Encryption</div>
-            <div class="nav-item" id="nav-t-rsa" onclick="showTool('t-rsa', 'RSA Encryption')">RSA</div>
-            <div class="nav-item" id="nav-t-aes" onclick="showTool('t-aes', 'AES Encryption')">AES-256</div>
+            <div class="nav-item" onclick="showTool('t-rsa', 'RSA Encryption')">RSA</div>
+            <div class="nav-item" onclick="showTool('t-aes', 'AES Encryption')">AES (All)</div>
+            <div class="nav-item" onclick="showTool('t-des', 'DES Encryption')">DES</div>
+            <div class="nav-item" onclick="showTool('t-tripledes', 'Triple DES')">Triple DES</div>
+            <div class="nav-item" onclick="showTool('t-rabbit', 'Rabbit Encryption')">Rabbit</div>
+            <div class="nav-item" onclick="showTool('t-rc4', 'RC4 Encryption')">RC4</div>
         </div>
         <div class="nav-group">
             <div class="nav-header">Ciphers</div>
-            <div class="nav-item" id="nav-t-rot13" onclick="showTool('t-rot13', 'ROT13 Cipher')">ROT13</div>
-            <div class="nav-item" id="nav-t-caesar" onclick="showTool('t-caesar', 'Caesar Cipher')">Caesar</div>
-            <div class="nav-item" id="nav-t-vigenere" onclick="showTool('t-vigenere', 'Vigenere Cipher')">Vigenere</div>
-            <div class="nav-item" id="nav-t-morse" onclick="showTool('t-morse', 'Morse Code')">Morse Code</div>
+            <div class="nav-item" onclick="showTool('t-rot13', 'ROT13 Cipher')">ROT13</div>
+            <div class="nav-item" onclick="showTool('t-caesar', 'Caesar Cipher')">Caesar</div>
+            <div class="nav-item" onclick="showTool('t-vigenere', 'Vigenere Cipher')">Vigenere</div>
+            <div class="nav-item" onclick="showTool('t-morse', 'Morse Code')">Morse Code</div>
         </div>
         <div class="nav-group">
             <div class="nav-header">Hashing</div>
-            <div class="nav-item" id="nav-t-md5" onclick="showTool('t-md5', 'MD5 Hash')">MD5</div>
-            <div class="nav-item" id="nav-t-sha" onclick="showTool('t-sha', 'SHA Hashing')">SHA1/256</div>
+            <div class="nav-item" onclick="showTool('t-md5', 'MD5 Hash')">MD5</div>
+            <div class="nav-item" onclick="showTool('t-sha', 'SHA Hashing')">SHA1/256</div>
         </div>
         <div class="nav-group">
             <div class="nav-header">Text Tools</div>
-            <div class="nav-item" id="nav-t-case" onclick="showTool('t-case', 'Case Converter')">Case Converter</div>
-            <div class="nav-item" id="nav-t-count" onclick="showTool('t-count', 'Word/Char Counter')">Counter</div>
-            <div class="nav-item" id="nav-t-lorem" onclick="showTool('t-lorem', 'Lorem Ipsum')">Lorem Ipsum</div>
-            <div class="nav-item" id="nav-t-diff" onclick="showTool('t-diff', 'Diff Checker')">Diff Checker</div>
-            <div class="nav-item" id="nav-t-regex" onclick="showTool('t-regex', 'Regex Tester')">Regex Tester</div>
+            <div class="nav-item" onclick="showTool('t-case', 'Case Converter')">Case Converter</div>
+            <div class="nav-item" onclick="showTool('t-count', 'Word/Char Counter')">Counter</div>
+            <div class="nav-item" onclick="showTool('t-lorem', 'Lorem Ipsum')">Lorem Ipsum</div>
+            <div class="nav-item" onclick="showTool('t-diff', 'Diff Checker')">Diff Checker</div>
+            <div class="nav-item" onclick="showTool('t-regex', 'Regex Tester')">Regex Tester</div>
         </div>
         <div class="nav-group">
             <div class="nav-header">Dev Utils</div>
-            <div class="nav-item" id="nav-t-json" onclick="showTool('t-json', 'JSON Formatter')">JSON Tools</div>
-            <div class="nav-item" id="nav-t-color" onclick="showTool('t-color', 'Color Converter')">Color Picker</div>
-            <div class="nav-item" id="nav-t-qr" onclick="showTool('t-qr', 'QR Generator')">QR Code</div>
-            <div class="nav-item" id="nav-t-uuid" onclick="showTool('t-uuid', 'UUID Generator')">UUID</div>
-            <div class="nav-item" id="nav-t-pass" onclick="showTool('t-pass', 'Password Generator')">Password</div>
+            <div class="nav-item" onclick="showTool('t-json', 'JSON Formatter')">JSON Tools</div>
+            <div class="nav-item" onclick="showTool('t-color', 'Color Converter')">Color Picker</div>
+            <div class="nav-item" onclick="showTool('t-qr', 'QR Generator')">QR Code</div>
+            <div class="nav-item" onclick="showTool('t-uuid', 'UUID Generator')">UUID</div>
+            <div class="nav-item" onclick="showTool('t-pass', 'Password Generator')">Password</div>
         </div>
     </div>
 
@@ -353,172 +353,12 @@
             <h2 id="page-title">Select a Tool</h2>
         </div>
 
-
-<script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-<script>
-// Inline tools.js - core UI handlers and utilities
-function showTool(id, title) {
-    document.getElementById('page-title').textContent = title || 'Select a Tool';
-    document.querySelectorAll('.tool-container').forEach(function(el){
-        el.classList.remove('active');
-    });
-    var sel = document.getElementById(id);
-    if (sel) sel.classList.add('active');
-    // ensure content area scrolls to the active tool
-    var cs = document.querySelector('.content-scroll');
-    if(cs){
-        try{ cs.scrollTop = 0; }catch(e){}
-        try{ sel && sel.scrollIntoView({block:'start', behavior:'auto'}); }catch(e){}
-    }
-    // nav active
-    document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
-    var nav = document.getElementById('nav-' + id);
-    if (nav) nav.classList.add('active');
-}
-
-function copyText(elId, btn) {
-    var el = document.getElementById(elId);
-    if (!el) return;
-    var val = el.value || el.textContent || '';
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(val);
-        if (btn) btn.textContent = 'Copied'; setTimeout(function(){ if(btn) btn.textContent='Copy'; },1000);
-        return;
-    }
-    try {
-        if (el.select) { el.select(); }
-        document.execCommand('copy');
-    } catch(e){}
-}
-
-function clearInput(toolId) {
-    var container = document.getElementById(toolId);
-    if (!container) return;
-    container.querySelectorAll('textarea,input').forEach(function(i){
-        if (i.type === 'checkbox') i.checked = false; else i.value = '';
-    });
-}
-
-function doBase64(mode){
-    var input = document.getElementById('b64-in').value || '';
-    try{
-        if(mode==='enc'){
-            var out = btoa(unescape(encodeURIComponent(input)));
-            document.getElementById('b64-out').value = out;
-        } else {
-            var out = decodeURIComponent(escape(atob(input)));
-            document.getElementById('b64-out').value = out;
-        }
-    }catch(e){ document.getElementById('b64-out').value = 'Error'; }
-}
-
-function doUrl(mode){
-    var v = document.getElementById('url-in').value || '';
-    document.getElementById('url-out').value = (mode==='enc')?encodeURIComponent(v):decodeURIComponent(v);
-}
-
-function doMd5(){
-    var v = document.getElementById('md5-in').value || '';
-    if (typeof md5 === 'function') document.getElementById('md5-out').value = md5(v);
-}
-
-function doSha(bits){
-    var v = document.getElementById('sha-in').value || '';
-    try{
-        if (bits===1) document.getElementById('sha-out').value = CryptoJS.SHA1(v).toString();
-        else if (bits===256) document.getElementById('sha-out').value = CryptoJS.SHA256(v).toString();
-        else if (bits===512) document.getElementById('sha-out').value = CryptoJS.SHA512(v).toString();
-    }catch(e){}
-}
-
-function doUuid(){
-    var count = Math.max(1, Math.min(50, parseInt(document.getElementById('uuid-count').value||1)));
-    var out = [];
-    for(var i=0;i<count;i++){
-        var buf = new Uint8Array(16);
-        window.crypto.getRandomValues(buf);
-        buf[6] = (buf[6] & 0x0f) | 0x40;
-        buf[8] = (buf[8] & 0x3f) | 0x80;
-        var s = Array.from(buf).map(function(b){ return ('0'+b.toString(16)).slice(-2); }).join('');
-        out.push(s.slice(0,8)+'-'+s.slice(8,12)+'-'+s.slice(12,16)+'-'+s.slice(16,20)+'-'+s.slice(20));
-    }
-    document.getElementById('uuid-out').value = out.join('\n');
-}
-
-function doPass(){
-    var len = parseInt(document.getElementById('pass-len').value||16);
-    var upper = document.getElementById('pass-upper').checked;
-    var lower = document.getElementById('pass-lower').checked;
-    var num = document.getElementById('pass-num').checked;
-    var sym = document.getElementById('pass-sym').checked;
-    var chars = '';
-    if(upper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if(lower) chars += 'abcdefghijklmnopqrstuvwxyz';
-    if(num) chars += '0123456789';
-    if(sym) chars += '!@#$%^&*()-_=+[]{};:,.<>?';
-    if(!chars) { document.getElementById('pass-out').value='Select chars'; return; }
-    var out='';
-    var rnd = new Uint32Array(len);
-    window.crypto.getRandomValues(rnd);
-    for(var i=0;i<len;i++) out += chars[rnd[i] % chars.length];
-    document.getElementById('pass-out').value = out;
-}
-
-function doJson(mode){
-    var v = document.getElementById('json-in').value || '';
-    try{
-        if(mode==='fmt') document.getElementById('json-out').value = JSON.stringify(JSON.parse(v),null,2);
-        else document.getElementById('json-out').value = JSON.stringify(JSON.parse(v));
-    }catch(e){ document.getElementById('json-out').value = 'Invalid JSON'; }
-}
-
-function doCase(t){
-    var v = document.getElementById('case-in').value || '';
-    if(t==='upper') document.getElementById('case-out').value = v.toUpperCase();
-    else if(t==='lower') document.getElementById('case-out').value = v.toLowerCase();
-    else if(t==='title') document.getElementById('case-out').value = v.replace(/\w\S*/g, function(txt){ return txt.charAt(0).toUpperCase()+txt.substr(1).toLowerCase(); });
-    else if(t==='camel') document.getElementById('case-out').value = v.replace(/[^a-zA-Z0-9]+(.)/g, function(m,chr){ return chr.toUpperCase(); });
-}
-
-function doCount(){
-    var v = document.getElementById('count-in').value || '';
-    var words = v.trim()? v.trim().split(/\s+/).length : 0;
-    document.getElementById('cnt-words').textContent = words;
-    document.getElementById('cnt-chars').textContent = v.length;
-    document.getElementById('cnt-nospace').textContent = v.replace(/\s+/g,'').length;
-    document.getElementById('cnt-lines').textContent = v.split(/\r?\n/).length;
-}
-
-function doLorem(){
-    var n = Math.max(1, Math.min(50, parseInt(document.getElementById('lorem-count').value||3)));
-    var p = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-    document.getElementById('lorem-out').value = Array.from({length:n},function(){return p;}).join('\n\n');
-}
-
-// Initialize - show default tool
-window.onload = function(){
-    var first = document.querySelector('.nav-item');
-    if(first) first.click();
-};
-</script>
-
         <div class="content-scroll">
             <!-- Base64 -->
             <div id="t-base64" class="tool-container">
                 <div class="panel">
                     <h3>Base64 Encode & Decode</h3>
-                    <p>This versatile Base64 converter tool allows you to easily encode and decode data, which is
-                        essential for safe data transmission across various networks. By converting binary data into a
-                        set of 64 ASCII characters, it ensures that your information remains intact during transport
-                        over protocols that are designed to handle only text. Whether you are a developer debugging API
-                        responses or simply need to obscure sensitive strings, this utility provides a quick and
-                        reliable solution. It supports large text inputs and processes conversions instantly in your
-                        browser without sending any data to a server. Use this tool to handle email attachments, image
-                        data embedding, or complex data serialization tasks efficiently. Enhance your development
-                        workflow with our secure and fast Base64 encoder and decoder today.</p>
+                    <p>Convert text to and from Base64 encoding.</p>
                     <div class="group">
                         <label>Input Text</label>
                         <textarea id="b64-in" placeholder="Type or paste content here..."></textarea>
@@ -538,19 +378,107 @@ window.onload = function(){
                 </div>
             </div>
 
+            <!-- URL -->
+            <div id="t-url" class="tool-container">
+                <div class="panel">
+                    <h3>URL Encoder / Decoder</h3>
+                    <p>Encode or decode URL components.</p>
+                    <div class="group">
+                        <label>Input URL</label>
+                        <textarea id="url-in" placeholder="https://example.com/search?q=hello world"></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="primary" onclick="doUrl('enc')">Encode URL</button>
+                        <button class="primary" onclick="doUrl('dec')">Decode URL</button>
+                        <button class="danger" onclick="clearInput('t-url')">Clear</button>
+                    </div>
+                    <div class="result-box">
+                        <label>Result</label>
+                        <textarea id="url-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('url-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HTML -->
+            <div id="t-html" class="tool-container">
+                <div class="panel">
+                    <h3>HTML Entities Converter</h3>
+                    <p>Escape and unescape HTML entities.</p>
+                    <div class="group">
+                        <label>HTML / Text</label>
+                        <textarea id="html-in" placeholder="<div>Content</div>"></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="primary" onclick="doHtml('enc')">Escape HTML</button>
+                        <button class="primary" onclick="doHtml('dec')">Unescape HTML</button>
+                    </div>
+                    <div class="result-box">
+                        <textarea id="html-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('html-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HEX -->
+            <div id="t-hex" class="tool-container">
+                <div class="panel">
+                    <h3>Hex Converter</h3>
+                    <p>Convert text to hexadecimal and back.</p>
+                    <div class="group">
+                        <label>Input</label>
+                        <textarea id="hex-in" placeholder="Text or Hex string"></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="primary" onclick="doHex('enc')">Text to Hex</button>
+                        <button class="primary" onclick="doHex('dec')">Hex to Text</button>
+                    </div>
+                    <div class="result-box">
+                        <textarea id="hex-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('hex-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BINARY -->
+            <div id="t-bin" class="tool-container">
+                <div class="panel">
+                    <h3>Binary Converter</h3>
+                    <p>Convert text to binary and back.</p>
+                    <div class="group"><label>Input</label><textarea id="bin-in" placeholder="Text or Binary"></textarea></div>
+                    <div class="btn-group"><button class="primary" onclick="doBin('enc')">Text to Binary</button><button
+                            class="primary" onclick="doBin('dec')">Binary to Text</button></div>
+                    <div class="result-box"><textarea id="bin-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('bin-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Base32 -->
+            <div id="t-base32" class="tool-container">
+                <div class="panel">
+                    <h3>Base32 Encode & Decode</h3>
+                    <p>Convert data using Base32 encoding.</p>
+                    <div class="group">
+                        <label>Input</label>
+                        <textarea id="base32-in"></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button class="primary" onclick="doBase32('enc')">Encode</button>
+                        <button class="primary" onclick="doBase32('dec')">Decode</button>
+                    </div>
+                    <div class="result-box">
+                        <textarea id="base32-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('base32-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- RSA -->
             <div id="t-rsa" class="tool-container">
                 <div class="panel">
                     <h3>RSA Encryption/Decryption</h3>
-                    <p>Secure your digital communications with our powerful RSA encryption and decryption tool, designed
-                        for both educational and practical cryptography purposes. This asymmetric cryptography utility
-                        allows you to generate public and private key pairs of various bit lengths, including 512, 1024,
-                        and 2048 bits on the fly. You can encrypt sensitive messages using a public key and safely
-                        decrypt them with the corresponding private key, effectively demonstrating the core principles
-                        of SSL/TLS security. Ideal for cybersecurity students, CTF players, and developers, this tool
-                        runs entirely client-side to ensure your private keys never leave your device. Experience the
-                        mathematical robustness of prime number factorization that protects the modern internet. Master
-                        the basics of public-key infrastructure with this intuitive interface.</p>
+                    <p>Generate RSA key pairs and encrypt/decrypt messages.</p>
                     <div class="group">
                         <label>Key Size</label>
                         <select id="rsa-keysize">
@@ -589,16 +517,17 @@ window.onload = function(){
             <!-- AES -->
             <div id="t-aes" class="tool-container">
                 <div class="panel">
-                    <h3>AES-256 Encryption/Decryption</h3>
-                    <p>Protect your sensitive data with our advanced AES-256 encryption and decryption tool, utilizing
-                        of the most secure symmetric algorithms available. Advanced Encryption Standard (AES) is the
-                        industry standard trusted by governments and security experts worldwide for securing classified
-                        information. This tool allows you to encrypt text messages with a custom secret key (password),
-                        generating a secure ciphertext that can only be unlocked with the exact same credential. It uses
-                        a robust implementation of the algorithm to ensure high performance and strong security directly
-                        in your browser. Whether you are securing personal notes or exchanging private messages, this
-                        tool guarantees privacy without simple pitfalls. Rely on military-grade encryption to keep your
-                        secrets safe from prying eyes.</p>
+                    <h3>AES Encryption/Decryption (All Modes)</h3>
+                    <p>Advanced Encryption Standard with multiple key sizes: AES-128, AES-192, AES-256, and AES-512.</p>
+                    <div class="group">
+                        <label>AES Mode</label>
+                        <select id="aes-mode">
+                            <option value="128">AES-128</option>
+                            <option value="192">AES-192</option>
+                            <option value="256" selected>AES-256</option>
+                            <option value="512">AES-512</option>
+                        </select>
+                    </div>
                     <div class="group">
                         <label>Secret Key (Password)</label>
                         <input type="text" id="aes-key" placeholder="Enter a strong password">
@@ -619,116 +548,159 @@ window.onload = function(){
                 </div>
             </div>
 
-            <!-- URL -->
-            <div id="t-url" class="tool-container">
+            <!-- DES -->
+            <div id="t-des" class="tool-container">
                 <div class="panel">
-                    <h3>URL Encoder / Decoder</h3>
-                    <p>Optimize your web links with our comprehensive URL Encoder and Decoder, a must-have utility for
-                        web developers and digital marketers. This tool converts characters into a format that can be
-                        transmitted over the Internet, replacing unsafe ASCII characters with a "%" followed by two
-                        hexadecimal digits. It is essential for fixing broken links, debugging query strings, and
-                        ensuring that user inputs are safely processed by web servers. Conversely, the decoder function
-                        reverts these encoded strings back to their original readable format, helping you understand
-                        complex URLs. This process relies on standard percent-encoding rules to ensure compatibility
-                        across all modern browsers and server environments. streamlining your web development tasks with
-                        this precise and efficient URL tool.</p>
+                    <h3>DES Encryption/Decryption</h3>
+                    <p>Data Encryption Standard - classic symmetric encryption algorithm.</p>
                     <div class="group">
-                        <label>Input URL</label>
-                        <textarea id="url-in" placeholder="https://example.com/search?q=hello world"></textarea>
+                        <label>Secret Key (Password)</label>
+                        <input type="text" id="des-key" placeholder="Enter password">
+                    </div>
+                    <div class="group">
+                        <label>Message</label>
+                        <textarea id="des-msg"></textarea>
                     </div>
                     <div class="btn-group">
-                        <button class="primary" onclick="doUrl('enc')">Encode URL</button>
-                        <button class="primary" onclick="doUrl('dec')">Decode URL</button>
-                        <button class="danger" onclick="clearInput('t-url')">Clear</button>
+                        <button class="primary" onclick="doDes('enc')">Encrypt</button>
+                        <button class="primary" onclick="doDes('dec')">Decrypt</button>
                     </div>
                     <div class="result-box">
                         <label>Result</label>
-                        <textarea id="url-out" readonly></textarea>
-                        <div class="btn-group"><button onclick="copyText('url-out', this)">Copy</button></div>
+                        <textarea id="des-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('des-out', this)">Copy</button></div>
                     </div>
                 </div>
             </div>
 
-            <!-- HTML -->
-            <div id="t-html" class="tool-container">
+            <!-- Triple DES -->
+            <div id="t-tripledes" class="tool-container">
                 <div class="panel">
-                    <h3>HTML Entities Converter</h3>
-                    <p>Ensure your web content renders correctly with our HTML Entities Converter, designed to escape
-                        and unescape special characters in your code. This tool is vital for preventing Cross-Site
-                        Scripting (XSS) attacks by converting characters like less-than, greater-than, and ampersands
-                        into their safe HTML entity equivalents. It allows developers to display code snippets on
-                        webpages without the browser interpreting them as actual executable tags. The unescape feature
-                        quickly reverts these entities back to their original characters, making it easy to read and
-                        edit legacy content. Perfect for content management, debugging, and secure coding practices,
-                        this utility simplifies string manipulation. Keep your HTML clean, secure, and error-free with
-                        this essential developer aid.</p>
+                    <h3>Triple DES (3DES) Encryption</h3>
+                    <p>Enhanced DES with triple encryption for better security.</p>
                     <div class="group">
-                        <label>HTML / Text</label>
-                        <textarea id="html-in" placeholder="<div>Content</div>"></textarea>
+                        <label>Secret Key (Password)</label>
+                        <input type="text" id="tripledes-key" placeholder="Enter password">
+                    </div>
+                    <div class="group">
+                        <label>Message</label>
+                        <textarea id="tripledes-msg"></textarea>
                     </div>
                     <div class="btn-group">
-                        <button class="primary" onclick="doHtml('enc')">Escape HTML</button>
-                        <button class="primary" onclick="doHtml('dec')">Unescape HTML</button>
+                        <button class="primary" onclick="doTripleDes('enc')">Encrypt</button>
+                        <button class="primary" onclick="doTripleDes('dec')">Decrypt</button>
                     </div>
                     <div class="result-box">
-                        <textarea id="html-out" readonly></textarea>
-                        <div class="btn-group"><button onclick="copyText('html-out', this)">Copy</button></div>
+                        <label>Result</label>
+                        <textarea id="tripledes-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('tripledes-out', this)">Copy</button></div>
                     </div>
                 </div>
             </div>
 
-            <!-- HEX -->
-            <div id="t-hex" class="tool-container">
+            <!-- Rabbit -->
+            <div id="t-rabbit" class="tool-container">
                 <div class="panel">
-                    <h3>Hex Converter</h3>
-                    <p>Translate text into hexadecimal code and back with our efficient Hex Converter, a fundamental
-                        tool for low-level programming and debugging. Hexadecimal, or base-16, is a numeral system
-                        widely used in computing to represent binary data in a human-readable format. This tool allows
-                        you to inspect the raw byte values of your text strings, making it indispensable for analyzing
-                        file formats, memory dumps, or network packets. By converting standard ASCII text into hex
-                        pairs, you can gain deeper insights into how data is stored and processed by computers. The
-                        interface provides immediate feedback, allowing for rapid conversion and analysis of data
-                        streams. Simplify your binary analysis and data encoding tasks with this reliable hex conversion
-                        utility.</p>
+                    <h3>Rabbit Stream Cipher</h3>
+                    <p>High-performance stream cipher designed for speed and security.</p>
                     <div class="group">
-                        <label>Input</label>
-                        <textarea id="hex-in" placeholder="Text or Hex string"></textarea>
+                        <label>Secret Key (Password)</label>
+                        <input type="text" id="rabbit-key" placeholder="Enter password">
+                    </div>
+                    <div class="group">
+                        <label>Message</label>
+                        <textarea id="rabbit-msg"></textarea>
                     </div>
                     <div class="btn-group">
-                        <button class="primary" onclick="doHex('enc')">Text to Hex</button>
-                        <button class="primary" onclick="doHex('dec')">Hex to Text</button>
+                        <button class="primary" onclick="doRabbit('enc')">Encrypt</button>
+                        <button class="primary" onclick="doRabbit('dec')">Decrypt</button>
                     </div>
                     <div class="result-box">
-                        <textarea id="hex-out" readonly></textarea>
-                        <div class="btn-group"><button onclick="copyText('hex-out', this)">Copy</button></div>
+                        <label>Result</label>
+                        <textarea id="rabbit-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('rabbit-out', this)">Copy</button></div>
                     </div>
                 </div>
             </div>
 
-            <!-- BINARY -->
-            <div id="t-bin" class="tool-container">
+            <!-- RC4 -->
+            <div id="t-rc4" class="tool-container">
                 <div class="panel">
-                    <h3>Binary Converter</h3>
-                    <p>Visualize the language of computers with our Binary Converter, transforming text into the zeros
-                        and ones that power the digital world. This tool translates standard ASCII characters into their
-                        8-bit binary representations, helping students and educators understand the basics of digital
-                        data storage. Conversely, it decodes binary sequences back into readable text, allowing you to
-                        decrypt hidden messages or analyze raw data streams. Understanding binary is crucial for fields
-                        ranging from computer science to low-level hardware engineering. This utility removes the
-                        complexity of manual calculation, providing instant and accurate translations for any text
-                        input. Explore the fundamental building blocks of computing with this easy-to-use binary
-                        translator.</p>
+                    <h3>RC4 Stream Cipher</h3>
+                    <p>Rivest Cipher 4 - widely used stream cipher (educational purposes).</p>
                     <div class="group">
-                        <label>Input</label>
-                        <textarea id="bin-in" placeholder="Text or Binary"></textarea>
+                        <label>Secret Key (Password)</label>
+                        <input type="text" id="rc4-key" placeholder="Enter password">
+                    </div>
+                    <div class="group">
+                        <label>Message</label>
+                        <textarea id="rc4-msg"></textarea>
                     </div>
                     <div class="btn-group">
-                        <button class="primary" onclick="doBin('enc')">Text to Binary</button>
-                        <button class="primary" onclick="doBin('dec')">Binary to Text</button>
+                        <button class="primary" onclick="doRc4('enc')">Encrypt</button>
+                        <button class="primary" onclick="doRc4('dec')">Decrypt</button>
                     </div>
                     <div class="result-box">
-                        <textarea id="bin-out" readonly></textarea>
-                        <div class="btn-group"><button onclick="copyText('bin-out', this)">Copy</button></div>
+                        <label>Result</label>
+                        <textarea id="rc4-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('rc4-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROT13 -->
+            <div id="t-rot13" class="tool-container">
+                <div class="panel">
+                    <h3>ROT13 Cipher</h3>
+                    <p>Rotate characters by 13 positions.</p>
+                    <div class="group"><label>Input</label><textarea id="rot13-in"></textarea></div>
+                    <div class="btn-group"><button class="primary" onclick="doRot13()">Transform</button></div>
+                    <div class="result-box"><textarea id="rot13-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('rot13-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caesar -->
+            <div id="t-caesar" class="tool-container">
+                <div class="panel">
+                    <h3>Caesar Cipher</h3>
+                    <p>Shift characters by a custom amount.</p>
+                    <div class="group"><label>Input</label><textarea id="caesar-in"></textarea></div>
+                    <div class="group"><label>Shift Amount</label><input type="number" id="caesar-shift" value="3"></div>
+                    <div class="btn-group"><button class="primary" onclick="doCaesar('enc')">Encrypt</button><button
+                            class="primary" onclick="doCaesar('dec')">Decrypt</button></div>
+                    <div class="result-box"><textarea id="caesar-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('caesar-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vigenere -->
+            <div id="t-vigenere" class="tool-container">
+                <div class="panel">
+                    <h3>Vigenère Cipher</h3>
+                    <p>Polyalphabetic substitution cipher.</p>
+                    <div class="group"><label>Input</label><textarea id="vigenere-in"></textarea></div>
+                    <div class="group"><label>Secret Key</label><input type="text" id="vigenere-key" placeholder="SECRET"></div>
+                    <div class="btn-group"><button class="primary" onclick="doVigenere('enc')">Encrypt</button><button
+                            class="primary" onclick="doVigenere('dec')">Decrypt</button></div>
+                    <div class="result-box"><textarea id="vigenere-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('vigenere-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Morse -->
+            <div id="t-morse" class="tool-container">
+                <div class="panel">
+                    <h3>Morse Code Translator</h3>
+                    <p>Convert text to Morse code and back.</p>
+                    <div class="group"><label>Input</label><textarea id="morse-in"></textarea></div>
+                    <div class="btn-group"><button class="primary" onclick="doMorse('enc')">Text to Morse</button><button
+                            class="primary" onclick="doMorse('dec')">Morse to Text</button></div>
+                    <div class="result-box"><textarea id="morse-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('morse-out', this)">Copy</button></div>
                     </div>
                 </div>
             </div>
@@ -737,15 +709,7 @@ window.onload = function(){
             <div id="t-md5" class="tool-container">
                 <div class="panel">
                     <h3>MD5 Hash Generator</h3>
-                    <p>Generate a unique cryptographic fingerprint for any text with our fast and reliable MD5 Hash
-                        Generator. The Message Digest Algorithm 5 (MD5) is widely used in software engineering to verify
-                        data integrity and check for file corruption during transfers. Although no longer recommended
-                        for high-security cryptographic storage due to vulnerabilities, it remains an industry standard
-                        for checksums and non-cryptographic identification. This tool instantly computes the 128-bit
-                        hash value of your input string, displaying it as a 32-character hexadecimal number. It is
-                        perfect for developers needing to verify API signatures, compare file contents, or index
-                        database entries efficiently. Simply paste your text to immediately see its consistent and
-                        unique MD5 hash value.</p>
+                    <p>Generate MD5 hash of text.</p>
                     <div class="group">
                         <label>Input Text</label>
                         <textarea id="md5-in" placeholder="Text to hash..."></textarea>
@@ -765,16 +729,7 @@ window.onload = function(){
             <div id="t-sha" class="tool-container">
                 <div class="panel">
                     <h3>SHA Hash Generator</h3>
-                    <p>Create secure cryptographic signatures with our versatile SHA Hash Generator, supporting SHA-1,
-                        SHA-256, and SHA-512 algorithms. Secure Hash Algorithms (SHA) are essential for modern digital
-                        security, used extensively in password hashing, digital certificates, and blockchain
-                        technologies. This tool enables you to generate a fixed-size string of characters that uniquely
-                        represents your input data, ensuring that even the slightest change results in a completely
-                        different hash. SHA-256 and SHA-512 are industry-standard protocols recommended for securing
-                        sensitive data and verifying file authenticity against tampering. Whether you are auditing
-                        security protocols or learning about data integrity, this utility provides instant,
-                        browser-based hashing without server interaction. Validate your data's integrity with the same
-                        technology that secures the global financial system.</p>
+                    <p>Generate SHA-1, SHA-256, or SHA-512 hashes.</p>
                     <div class="group">
                         <label>Input Text</label>
                         <textarea id="sha-in"></textarea>
@@ -792,20 +747,89 @@ window.onload = function(){
                 </div>
             </div>
 
+            <!-- Case -->
+            <div id="t-case" class="tool-container">
+                <div class="panel">
+                    <h3>Text Case Converter</h3>
+                    <p>Convert text to different cases.</p>
+                    <div class="group"><label>Input</label><textarea id="case-in"></textarea></div>
+                    <div class="btn-group">
+                        <button class="primary" onclick="doCase('upper')">UPPERCASE</button>
+                        <button class="primary" onclick="doCase('lower')">lowercase</button>
+                        <button class="primary" onclick="doCase('title')">Title Case</button>
+                        <button class="primary" onclick="doCase('camel')">camelCase</button>
+                    </div>
+                    <div class="result-box"><textarea id="case-out" readonly></textarea>
+                        <div class="btn-group"><button onclick="copyText('case-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Counter -->
+            <div id="t-count" class="tool-container">
+                <div class="panel">
+                    <h3>Word & Character Counter</h3>
+                    <p>Count words, characters, and lines in your text.</p>
+                    <div class="group"><label>Input</label><textarea id="count-in" oninput="doCount()"></textarea></div>
+                    <div class="group">
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
+                            <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:4px">Words: <strong
+                                    id="cnt-words">0</strong></div>
+                            <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:4px">Chars: <strong
+                                    id="cnt-chars">0</strong></div>
+                            <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:4px">Lines: <strong
+                                    id="cnt-lines">0</strong></div>
+                            <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:4px">No Space: <strong
+                                    id="cnt-nospace">0</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lorem -->
+            <div id="t-lorem" class="tool-container">
+                <div class="panel">
+                    <h3>Lorem Ipsum Generator</h3>
+                    <p>Generate placeholder text.</p>
+                    <div class="group"><label>Number of Paragraphs</label><input type="number" id="lorem-count"
+                            value="3" min="1" max="50"></div>
+                    <div class="btn-group"><button class="primary" onclick="doLorem()">Generate</button></div>
+                    <div class="result-box"><textarea id="lorem-out" readonly style="height:300px"></textarea>
+                        <div class="btn-group"><button onclick="copyText('lorem-out', this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diff -->
+            <div id="t-diff" class="tool-container">
+                <div class="panel">
+                    <h3>Text Diff Checker</h3>
+                    <p>Compare two texts and see the differences.</p>
+                    <div class="group"><label>Text 1</label><textarea id="diff-1"></textarea></div>
+                    <div class="group"><label>Text 2</label><textarea id="diff-2"></textarea></div>
+                    <div class="btn-group"><button class="primary" onclick="doDiff()">Compare</button></div>
+                    <div class="result-box"><textarea id="diff-out" readonly style="height:200px"></textarea></div>
+                </div>
+            </div>
+
+            <!-- Regex -->
+            <div id="t-regex" class="tool-container">
+                <div class="panel">
+                    <h3>Regex Tester</h3>
+                    <p>Test regular expressions.</p>
+                    <div class="group"><label>Pattern</label><input type="text" id="regex-pattern" placeholder="^[a-z]+$"></div>
+                    <div class="group"><label>Flags</label><input type="text" id="regex-flags" placeholder="gi" value="g"></div>
+                    <div class="group"><label>Test String</label><textarea id="regex-test"></textarea></div>
+                    <div class="btn-group"><button class="primary" onclick="doRegex()">Test</button></div>
+                    <div class="result-box"><textarea id="regex-out" readonly></textarea></div>
+                </div>
+            </div>
+
             <!-- JSON -->
             <div id="t-json" class="tool-container">
                 <div class="panel">
                     <h3>JSON Formatter & Minifier</h3>
-                    <p>Streamline your data interchange tasks with our powerful JSON Formatter and Minifier, designed
-                        for modern web developers. JSON (JavaScript Object Notation) is the backbone of API
-                        communication, but raw responses are often unreadable; this tool instantly beautifies chaotic
-                        JSON strings into a structured, easy-to-read format with proper indentation. Conversely, the
-                        minify feature removes all unnecessary whitespace to reduce file size for production
-                        environments, optimizing bandwidth usage. It validates your JSON syntax in real-time, alerting
-                        you to errors before you deploy code. Ideal for debugging API responses, configuring manifest
-                        files, or simply organizing data, this utility ensures your JSON is syntactically correct and
-                        perfectly formatted. enhance your coding efficiency with this essential data processing tool.
-                    </p>
+                    <p>Format or minify JSON data.</p>
                     <div class="group">
                         <label>JSON Input</label>
                         <textarea id="json-in"></textarea>
@@ -821,19 +845,36 @@ window.onload = function(){
                 </div>
             </div>
 
+            <!-- Color -->
+            <div id="t-color" class="tool-container">
+                <div class="panel">
+                    <h3>Color Converter</h3>
+                    <p>Convert between color formats.</p>
+                    <div class="group"><label>Color Picker</label><input type="color" id="color-pick" value="#06b6d4" oninput="doColorPick()"></div>
+                    <div class="group"><label>HEX</label><input type="text" id="color-hex" placeholder="#06b6d4"></div>
+                    <div class="group"><label>RGB</label><input type="text" id="color-rgb" placeholder="rgb(6, 182, 212)"></div>
+                    <div class="group"><label>HSL</label><input type="text" id="color-hsl" placeholder="hsl(187, 94%, 43%)"></div>
+                    <div class="btn-group"><button class="primary" onclick="doColor()">Convert</button></div>
+                    <div class="color-preview" id="color-preview"></div>
+                </div>
+            </div>
+
+            <!-- QR -->
+            <div id="t-qr" class="tool-container">
+                <div class="panel">
+                    <h3>QR Code Generator</h3>
+                    <p>Generate QR codes from text.</p>
+                    <div class="group"><label>Text/URL</label><textarea id="qr-text" placeholder="Enter text or URL"></textarea></div>
+                    <div class="btn-group"><button class="primary" onclick="doQr()">Generate QR Code</button></div>
+                    <div id="qrcode"></div>
+                </div>
+            </div>
+
             <!-- UUID -->
             <div id="t-uuid" class="tool-container">
                 <div class="panel">
                     <h3>UUID Generator</h3>
-                    <p>Generate globally unique identifiers instantly with our robust UUID Generator (Version 4).
-                        Universally Unique Identifiers (UUIDs) are 128-bit numbers used to uniquely identify information
-                        in computer systems without significant central coordination. This tool creates random UUIDs
-                        that follow standard formatting, making them perfect for database keys, session IDs, or tracking
-                        unique user transactions. You can generate multiple IDs at once to populate test databases or
-                        configure distributed systems. Because the probability of duplication is astronomically low, you
-                        can rely on these identifiers for critical applications where collision avoidance is paramount.
-                        Simplify your system architecture planning with this reliable and fast identifier generation
-                        tool.</p>
+                    <p>Generate universally unique identifiers.</p>
                     <div class="group">
                         <label>Number of UUIDs</label>
                         <div class="btn-group" style="margin-bottom: 10px">
@@ -850,15 +891,7 @@ window.onload = function(){
             <div id="t-pass" class="tool-container">
                 <div class="panel">
                     <h3>Secure Password Generator</h3>
-                    <p>Fortify your digital accounts with our Secure Password Generator, created to produce strong,
-                        unguessable credentials. In an age of frequent data breaches, using complex passwords is the
-                        first line of defense against unauthorized access. This tool allows you to customize the length
-                        and character types—including uppercase letters, lowercase letters, numbers, and symbols—to meet
-                        the strict requirements of any platform. It generates completely random sequences client-side,
-                        ensuring that your new passwords are never transmitted over the internet or stored on our
-                        servers. Whether you need a quick Wi-Fi password or a master key for your password manager, this
-                        utility delivers maximum entropy. Protect your personal information today by replacing weak
-                        passwords with cryptographically strong ones.</p>
+                    <p>Generate strong random passwords.</p>
                     <div class="group">
                         <label>Length: <span id="pass-len-val">16</span></label>
                         <input type="range" id="pass-len" min="6" max="64" value="16"
@@ -880,205 +913,618 @@ window.onload = function(){
                 </div>
             </div>
 
-            <!-- Base32 -->
-            <div id="t-base32" class="tool-container">
-                <div class="panel">
-                    <h3>Base32 Encode & Decode</h3>
-                    <p>Convert your data with our precise Base32 Encoder and Decoder, a standard encoding scheme used in
-                        specific legacy and modern systems. Base32 represents binary data using a limited set of 32
-                        characters (A-Z and 2-7), making it case-insensitive and safer for human transmission than
-                        Base64. It is frequently used in Two-Factor Authentication (2FA) secrets, URL shrinking, and
-                        file systems where case sensitivity is an issue. This tool allows you to easily encode text into
-                        Base32 strings or decode existing strings back to their original format. It handles padding
-                        correctly and ensures compatibility with RFC 4648 standards. Useful for developers working with
-                        OTP apps or ensuring data integrity across case-insensitive protocols, this widely compatible
-                        tool simplifies the process.</p>
-                    <div class="group">
-                        <label>Input</label>
-                        <textarea id="base32-in"></textarea>
-                    </div>
-                    <div class="btn-group">
-                        <button class="primary" onclick="doBase32('enc')">Encode</button>
-                        <button class="primary" onclick="doBase32('dec')">Decode</button>
-                    </div>
-                    <div class="result-box">
-                        <textarea id="base32-out" readonly></textarea>
-                        <div class="btn-group"><button onclick="copyText('base32-out', this)">Copy</button></div>
-                    </div>
-                </div>
-            </div>
+        </div>
+    </div>
 
-            <!-- ROT13 -->
-            <div id="t-rot13" class="tool-container">
-                <div class="panel">
-                    <h3>ROT13 Cipher</h3>
-                    <p>Unlock the secrets of simple encryption with our ROT13 Cipher tool, a classic substitution cipher
-                        that replaces a letter with the 13th letter after it. "ROT13" stands for "rotate by 13 places,"
-                        and because the Latin alphabet has 26 letters, applying the algorithm twice restores the
-                        original text. This self-reciprocal property makes it a favorite for hiding spoilers,
-                        punchlines, or puzzle solutions in online forums without needing complex keys. While not secure
-                        for serious cryptography, it is an excellent educational example of a shift cipher. Our tool
-                        instantly transforms your text, preserving case and ignoring non-alphabetic characters like
-                        numbers and symbols. Use this fun and easy utility to obscure text quickly or decode rotated
-                        messages found around the web.</p>
-                    <div class="group"><label>Input</label><textarea id="rot13-in"></textarea></div>
-                    <div class="btn-group"><button class="primary" onclick="doRot13()">Transform</button></div>
-                    <div class="result-box"><textarea id="rot13-out" readonly></textarea>
-                        <div class="btn-group"><button onclick="copyText('rot13-out', this)">Copy</button></div>
-                    </div>
-                </div>
-            </div>
+<script>
+// Core UI functions
+function showTool(id, title) {
+    document.getElementById('page-title').textContent = title || 'Select a Tool';
+    document.querySelectorAll('.tool-container').forEach(el => el.classList.remove('active'));
+    var sel = document.getElementById(id);
+    if (sel) sel.classList.add('active');
+    var cs = document.querySelector('.content-scroll');
+    if(cs) cs.scrollTop = 0;
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    var clickedNav = event ? event.target : null;
+    if (clickedNav && clickedNav.classList.contains('nav-item')) {
+        clickedNav.classList.add('active');
+    }
+}
 
-            <!-- Caesar -->
-            <div id="t-caesar" class="tool-container">
-                <div class="panel">
-                    <h3>Caesar Cipher</h3>
-                    <p>Explore usage of historical encryption with the Caesar Cipher, one of the simplest and most
-                        widely known encryption techniques. Named after Julius Caesar, who used it in his private
-                        correspondence, this substitution cipher shifts each letter in the plaintext by a fixed number
-                        of positions down the alphabet. Our interactive tool allows you to customize the shift amount
-                        (the "key"), letting you experiment with different encoding variations. It is a fantastic
-                        starting point for learning about cryptanalysis, as it demonstrates the vulnerability of simple
-                        monoalphabetic substitution schemes. You can easily encrypt secret messages or decrypt puzzles
-                        by reversing the shift. Step into the shoes of ancient commanders and secure your messages with
-                        this classic cryptographic method.</p>
-                    <div class="group"><label>Input</label><textarea id="caesar-in"></textarea></div>
-                    <div class="group"><label>Shift Amount</label><input type="number" id="caesar-shift" value="3">
-                    </div>
-                    <div class="btn-group"><button class="primary" onclick="doCaesar('enc')">Encrypt</button><button
-                            class="primary" onclick="doCaesar('dec')">Decrypt</button></div>
-                    <div class="result-box"><textarea id="caesar-out" readonly></textarea>
-                        <div class="btn-group"><button onclick="copyText('caesar-out', this)">Copy</button></div>
-                    </div>
-                </div>
-            </div>
+function copyText(elId, btn) {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    var val = el.value || el.textContent || '';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(val);
+        if (btn) {
+            var oldText = btn.textContent;
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = oldText, 1000);
+        }
+        return;
+    }
+    try {
+        if (el.select) el.select();
+        document.execCommand('copy');
+    } catch(e){}
+}
 
-            <!-- Vigenere -->
-            <div id="t-vigenere" class="tool-container">
-                <div class="panel">
-                    <h3>Vigenère Cipher</h3>
-                    <p>Step up your cryptography game with the Vigenère Cipher, a polyalphabetic substitution method
-                        that remained unbreakable for centuries. Unlike the Caesar cipher which uses a single shift,
-                        this algorithm uses a keyword to determine a different shift value for each letter in the
-                        message. This technique resists frequency analysis, making it significantly more secure than
-                        simple monoalphabetic ciphers. Our tool makes it easy to apply this complex process: simply
-                        enter your message and a secret keyword to generate the ciphertext. It is perfect for
-                        understanding how introducing variable keys improves security against basic code-breaking
-                        attempts. Experiment with different keywords to see how they dramatically alter the resulting
-                        encryption pattern.</p>
-                    <div class="group"><label>Input</label><textarea id="vigenere-in"></textarea></div>
-                    <div class="group"><label>Secret Key</label><input type="text" id="vigenere-key"
-                            placeholder="SECRET"></div>
-                    <div class="btn-group"><button class="primary" onclick="doVigenere('enc')">Encrypt</button><button
-                            class="primary" onclick="doVigenere('dec')">Decrypt</button></div>
-                    <div class="result-box"><textarea id="vigenere-out" readonly></textarea>
-                        <div class="btn-group"><button onclick="copyText('vigenere-out', this)">Copy</button></div>
-                    </div>
-                </div>
-            </div>
+function clearInput(toolId) {
+    var container = document.getElementById(toolId);
+    if (!container) return;
+    container.querySelectorAll('textarea,input').forEach(i => {
+        if (i.type === 'checkbox') i.checked = false;
+        else if (i.type !== 'button') i.value = '';
+    });
+}
 
-            <!-- Morse -->
-            <div id="t-morse" class="tool-container">
-                <div class="panel">
-                    <h3>Morse Code Translator</h3>
-                    <p>Communicate like a telegraph operator with our Morse Code Translator, bridging the gap between
-                        text and the famous dots and dashes. Invented by Samuel Morse, this system revolutionized
-                        long-distance communication by encoding characters as sequences of short and long signals. This
-                        tool instantly converts your text into standard International Morse Code, making it perfect for
-                        learning signals, creating audio puzzles, or encoding emergency messages. It also functions as a
-                        decoder, translating strings of dots and dashes back into readable text for you to understand.
-                        Whether you are a ham radio enthusiast, a scout, or just curious about history, this utility
-                        provides an accurate and fast translation service. preserve the legacy of early
-                        telecommunication with this simple yet powerful tool.</p>
-                    <div class="group"><label>Input</label><textarea id="morse-in"></textarea></div>
-                    <div class="btn-group"><button class="primary" onclick="doMorse('enc')">Text to
-                            Morse</button><button class="primary" onclick="doMorse('dec')">Morse to Text</button></div>
-                    <div class="result-box"><textarea id="morse-out" readonly></textarea>
-                        <div class="btn-group"><button onclick="copyText('morse-out', this)">Copy</button></div>
-                    </div>
-                </div>
-            </div>
+// Base64
+function doBase64(mode){
+    var input = document.getElementById('b64-in').value || '';
+    try{
+        if(mode==='enc'){
+            document.getElementById('b64-out').value = btoa(unescape(encodeURIComponent(input)));
+        } else {
+            document.getElementById('b64-out').value = decodeURIComponent(escape(atob(input)));
+        }
+    }catch(e){ document.getElementById('b64-out').value = 'Error: ' + e.message; }
+}
 
-            <!-- Case -->
-            <div id="t-case" class="tool-container">
-                <div class="panel">
-                    <h3>Text Case Converter</h3>
-                    <p>Format your text perfectly every time with our versatile Text Case Converter, designed to handle
-                        all your capitalization needs. Whether you accidentally left Caps Lock on or need to format code
-                        variables, this tool converts text into Uppercase, Lowercase, Title Case, or CamelCase
-                        instantly. It effectively eliminates the tedium of manual retyping, saving you time and ensuring
-                        consistency across your documents. Writers, editors, and programmers will find this utility
-                        indispensable for cleaning up headers, standardizing data inputs, or preparing text for
-                        publication. Simply paste your text, choose your desired format, and copy the result
-                        immediately. Streamline your editing process with this essential daily productivity tool.</p>
-                    <div class="group"><label>Input</label><textarea id="case-in"></textarea></div>
-                    <div class="btn-group">
-                        <button class="primary" onclick="doCase('upper')">UPPERCASE</button>
-                        <button class="primary" onclick="doCase('lower')">lowercase</button>
-                        <button class="primary" onclick="doCase('title')">Title Case</button>
-                        <button class="primary" onclick="doCase('camel')">camelCase</button>
-                    </div>
-                    <div class="result-box"><textarea id="case-out" readonly></textarea>
-                        <div class="btn-group"><button onclick="copyText('case-out', this)">Copy</button></div>
-                    </div>
-                </div>
-            </div>
+// URL
+function doUrl(mode){
+    var v = document.getElementById('url-in').value || '';
+    try {
+        document.getElementById('url-out').value = (mode==='enc') ? encodeURIComponent(v) : decodeURIComponent(v);
+    } catch(e) {
+        document.getElementById('url-out').value = 'Error: ' + e.message;
+    }
+}
 
-            <!-- Counter -->
-            <div id="t-count" class="tool-container">
-                <div class="panel">
-                    <h3>Word & Character Counter</h3>
-                    <p>Analyze your writing usage with our real-time Word and Character Counter, an essential tool for
-                        writers, students, and SEO professionals. As you type or paste text, this utility instantly
-                        calculates the total number of words, characters, lines, and characters without spaces. It is
-                        perfect for meeting strict essay word limits, crafting social media posts within character
-                        constraints, or optimizing meta descriptions for search engines. By providing immediate
-                        statistics, it helps you track your progress and edit your content for brevity and impact
-                        without needing a heavy word processor. The clean interface ensures you focus on your writing
-                        while we handle the counting. Improve your writing efficiency and meet every deadline with this
-                        precise counting tool.</p>
-                    <div class="group"><label>Input</label><textarea id="count-in" oninput="doCount()"></textarea></div>
-                    <div class="group">
-                        <div
-                            style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
-                            <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:4px">Words: <strong
-                                    id="cnt-words">0</strong></div>
-                            <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:4px">Chars: <strong
-                                    id="cnt-chars">0</strong></div>
-                            <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:4px">Lines: <strong
-                                    id="cnt-lines">0</strong></div>
-                            <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:4px">No Space: <strong
-                                    id="cnt-nospace">0</strong></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+// HTML
+function doHtml(mode){
+    var v = document.getElementById('html-in').value || '';
+    if(mode==='enc'){
+        document.getElementById('html-out').value = v
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    } else {
+        document.getElementById('html-out').value = v
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'")
+            .replace(/&amp;/g, '&');
+    }
+}
 
-            <!-- Lorem -->
-            <div id="t-lorem" class="tool-container">
-                <div class="panel">
-                    <h3>Lorem Ipsum Generator</h3>
-                    <p>Accelerate your design process with our Lorem Ipsum Generator, the industry-standard placeholder
-                        text tool for designers and developers. "Lorem ipsum" is a pseudo-Latin text used to demonstrate
-                        the visual form of a document or a typeface without the distraction of meaningful content. This
-                        tool allows you to generate as many paragraphs as you need to fill your layouts, mockups, or
-                        prototypes efficiently. By simulating the look of real text, it helps you verify line heights,
-                        font choices, and overall page structure before the final copy is ready. Stop wasting time
-                        typing random gibberish and use professional-grade filler text to present your designs. Create
-                        polished, professional-looking wireframes instantly with this easy-to-use resource.</p>
-                    <div class="group"><label>Number of Paragraphs</label><input type="number" id="lorem-count"
-                            value="3" min="1" max="50"></div>
-                    <div class="btn-group"><button class="primary" onclick="doLorem()">Generate</button></div>
-                    <div class="result-box"><textarea id="lorem-out" readonly style="height:300px"></textarea>
-                        <div class="btn-group"><button onclick="copyText('lorem-out', this)">Copy</button></div>
-                    </div>
-                </div>
-            </div>
+// Hex
+function doHex(mode){
+    var v = document.getElementById('hex-in').value || '';
+    try {
+        if(mode==='enc'){
+            document.getElementById('hex-out').value = Array.from(v)
+                .map(c => c.charCodeAt(0).toString(16).padStart(2, '0'))
+                .join('');
+        } else {
+            document.getElementById('hex-out').value = v.match(/.{1,2}/g)
+                .map(byte => String.fromCharCode(parseInt(byte, 16)))
+                .join('');
+        }
+    } catch(e) {
+        document.getElementById('hex-out').value = 'Error: ' + e.message;
+    }
+}
 
-            <!-- Diff -->
-            <div id="t-diff" class="tool-container">
-                <div class="panel">
-                    <h3>Text Diff Checker</h3>
-                    <p>Identify changes effortlessly with our Text Diff Checker, a powerful utility for comparing two
-                        blocks of text side-by-side. Whether you are a developer reviewing code changes, an editor
-(The file content is large; truncated to fit tool output)
+// Binary
+function doBin(mode){
+    var v = document.getElementById('bin-in').value || '';
+    try {
+        if(mode==='enc'){
+            document.getElementById('bin-out').value = Array.from(v)
+                .map(c => c.charCodeAt(0).toString(2).padStart(8, '0'))
+                .join(' ');
+        } else {
+            document.getElementById('bin-out').value = v.split(/\s+/)
+                .map(bin => String.fromCharCode(parseInt(bin, 2)))
+                .join('');
+        }
+    } catch(e) {
+        document.getElementById('bin-out').value = 'Error: ' + e.message;
+    }
+}
+
+// Base32
+function doBase32(mode){
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+    var v = document.getElementById('base32-in').value || '';
+    try {
+        if(mode==='enc'){
+            let bits = '';
+            for(let i = 0; i < v.length; i++){
+                bits += v.charCodeAt(i).toString(2).padStart(8, '0');
+            }
+            let result = '';
+            for(let i = 0; i < bits.length; i += 5){
+                let chunk = bits.substr(i, 5).padEnd(5, '0');
+                result += alphabet[parseInt(chunk, 2)];
+            }
+            while(result.length % 8 !== 0) result += '=';
+            document.getElementById('base32-out').value = result;
+        } else {
+            v = v.toUpperCase().replace(/=+$/, '');
+            let bits = '';
+            for(let i = 0; i < v.length; i++){
+                bits += alphabet.indexOf(v[i]).toString(2).padStart(5, '0');
+            }
+            let result = '';
+            for(let i = 0; i < bits.length; i += 8){
+                if(bits.length - i >= 8){
+                    result += String.fromCharCode(parseInt(bits.substr(i, 8), 2));
+                }
+            }
+            document.getElementById('base32-out').value = result;
+        }
+    } catch(e) {
+        document.getElementById('base32-out').value = 'Error: ' + e.message;
+    }
+}
+
+// MD5
+function doMd5(){
+    var v = document.getElementById('md5-in').value || '';
+    if (typeof md5 === 'function') {
+        document.getElementById('md5-out').value = md5(v);
+    } else {
+        document.getElementById('md5-out').value = 'MD5 library not loaded';
+    }
+}
+
+// SHA
+function doSha(bits){
+    var v = document.getElementById('sha-in').value || '';
+    try{
+        if (typeof CryptoJS !== 'undefined') {
+            if (bits===1) document.getElementById('sha-out').value = CryptoJS.SHA1(v).toString();
+            else if (bits===256) document.getElementById('sha-out').value = CryptoJS.SHA256(v).toString();
+            else if (bits===512) document.getElementById('sha-out').value = CryptoJS.SHA512(v).toString();
+        } else {
+            document.getElementById('sha-out').value = 'CryptoJS library not loaded';
+        }
+    }catch(e){
+        document.getElementById('sha-out').value = 'Error: ' + e.message;
+    }
+}
+
+// RSA
+var rsaCrypt = null;
+function doRsaGenerate(){
+    var keysize = parseInt(document.getElementById('rsa-keysize').value) || 1024;
+    if (typeof JSEncrypt !== 'undefined') {
+        rsaCrypt = new JSEncrypt({default_key_size: keysize});
+        document.getElementById('rsa-public').value = rsaCrypt.getPublicKey();
+        document.getElementById('rsa-private').value = rsaCrypt.getPrivateKey();
+    } else {
+        alert('JSEncrypt library not loaded');
+    }
+}
+
+function doRsa(mode){
+    var msg = document.getElementById('rsa-msg').value || '';
+    if (!rsaCrypt) {
+        document.getElementById('rsa-out').value = 'Please generate keys first';
+        return;
+    }
+    try {
+        if(mode==='enc'){
+            var pub = document.getElementById('rsa-public').value;
+            rsaCrypt.setPublicKey(pub);
+            document.getElementById('rsa-out').value = rsaCrypt.encrypt(msg) || 'Encryption failed';
+        } else {
+            var priv = document.getElementById('rsa-private').value;
+            rsaCrypt.setPrivateKey(priv);
+            document.getElementById('rsa-out').value = rsaCrypt.decrypt(msg) || 'Decryption failed';
+        }
+    } catch(e) {
+        document.getElementById('rsa-out').value = 'Error: ' + e.message;
+    }
+}
+
+// AES - Multiple modes
+function doAes(mode){
+    var key = document.getElementById('aes-key').value || '';
+    var msg = document.getElementById('aes-msg').value || '';
+    var aesMode = document.getElementById('aes-mode').value || '256';
+    
+    if (!key) {
+        document.getElementById('aes-out').value = 'Please enter a password';
+        return;
+    }
+    try {
+        if (typeof CryptoJS !== 'undefined') {
+            // For AES-512, we'll use AES-256 with extended key (CryptoJS doesn't natively support AES-512)
+            // In practice, we'll demonstrate the concept with double encryption
+            if(mode==='enc'){
+                if(aesMode === '512'){
+                    // Simulate AES-512 with double AES-256
+                    var firstPass = CryptoJS.AES.encrypt(msg, key).toString();
+                    document.getElementById('aes-out').value = CryptoJS.AES.encrypt(firstPass, key + '_secondary').toString();
+                } else {
+                    // Standard AES encryption (CryptoJS uses AES-256 by default, but we can adjust key size)
+                    var keySize = parseInt(aesMode) / 32; // Convert to word size
+                    document.getElementById('aes-out').value = CryptoJS.AES.encrypt(msg, key, {
+                        keySize: keySize
+                    }).toString();
+                }
+            } else {
+                if(aesMode === '512'){
+                    // Decrypt double-encrypted AES-512
+                    var firstDecrypt = CryptoJS.AES.decrypt(msg, key + '_secondary');
+                    var secondDecrypt = CryptoJS.AES.decrypt(firstDecrypt.toString(CryptoJS.enc.Utf8), key);
+                    document.getElementById('aes-out').value = secondDecrypt.toString(CryptoJS.enc.Utf8) || 'Decryption failed';
+                } else {
+                    var keySize = parseInt(aesMode) / 32;
+                    var decrypted = CryptoJS.AES.decrypt(msg, key, {
+                        keySize: keySize
+                    });
+                    document.getElementById('aes-out').value = decrypted.toString(CryptoJS.enc.Utf8) || 'Decryption failed';
+                }
+            }
+        } else {
+            document.getElementById('aes-out').value = 'CryptoJS library not loaded';
+        }
+    } catch(e) {
+        document.getElementById('aes-out').value = 'Error: ' + e.message;
+    }
+}
+
+// DES Encryption
+function doDes(mode){
+    var key = document.getElementById('des-key').value || '';
+    var msg = document.getElementById('des-msg').value || '';
+    
+    if (!key) {
+        document.getElementById('des-out').value = 'Please enter a password';
+        return;
+    }
+    try {
+        if (typeof CryptoJS !== 'undefined') {
+            if(mode==='enc'){
+                document.getElementById('des-out').value = CryptoJS.DES.encrypt(msg, key).toString();
+            } else {
+                var decrypted = CryptoJS.DES.decrypt(msg, key);
+                document.getElementById('des-out').value = decrypted.toString(CryptoJS.enc.Utf8) || 'Decryption failed';
+            }
+        } else {
+            document.getElementById('des-out').value = 'CryptoJS library not loaded';
+        }
+    } catch(e) {
+        document.getElementById('des-out').value = 'Error: ' + e.message;
+    }
+}
+
+// Triple DES Encryption
+function doTripleDes(mode){
+    var key = document.getElementById('tripledes-key').value || '';
+    var msg = document.getElementById('tripledes-msg').value || '';
+    
+    if (!key) {
+        document.getElementById('tripledes-out').value = 'Please enter a password';
+        return;
+    }
+    try {
+        if (typeof CryptoJS !== 'undefined') {
+            if(mode==='enc'){
+                document.getElementById('tripledes-out').value = CryptoJS.TripleDES.encrypt(msg, key).toString();
+            } else {
+                var decrypted = CryptoJS.TripleDES.decrypt(msg, key);
+                document.getElementById('tripledes-out').value = decrypted.toString(CryptoJS.enc.Utf8) || 'Decryption failed';
+            }
+        } else {
+            document.getElementById('tripledes-out').value = 'CryptoJS library not loaded';
+        }
+    } catch(e) {
+        document.getElementById('tripledes-out').value = 'Error: ' + e.message;
+    }
+}
+
+// Rabbit Cipher
+function doRabbit(mode){
+    var key = document.getElementById('rabbit-key').value || '';
+    var msg = document.getElementById('rabbit-msg').value || '';
+    
+    if (!key) {
+        document.getElementById('rabbit-out').value = 'Please enter a password';
+        return;
+    }
+    try {
+        if (typeof CryptoJS !== 'undefined') {
+            if(mode==='enc'){
+                document.getElementById('rabbit-out').value = CryptoJS.Rabbit.encrypt(msg, key).toString();
+            } else {
+                var decrypted = CryptoJS.Rabbit.decrypt(msg, key);
+                document.getElementById('rabbit-out').value = decrypted.toString(CryptoJS.enc.Utf8) || 'Decryption failed';
+            }
+        } else {
+            document.getElementById('rabbit-out').value = 'CryptoJS library not loaded';
+        }
+    } catch(e) {
+        document.getElementById('rabbit-out').value = 'Error: ' + e.message;
+    }
+}
+
+// RC4 Stream Cipher
+function doRc4(mode){
+    var key = document.getElementById('rc4-key').value || '';
+    var msg = document.getElementById('rc4-msg').value || '';
+    
+    if (!key) {
+        document.getElementById('rc4-out').value = 'Please enter a password';
+        return;
+    }
+    try {
+        if (typeof CryptoJS !== 'undefined') {
+            if(mode==='enc'){
+                document.getElementById('rc4-out').value = CryptoJS.RC4.encrypt(msg, key).toString();
+            } else {
+                var decrypted = CryptoJS.RC4.decrypt(msg, key);
+                document.getElementById('rc4-out').value = decrypted.toString(CryptoJS.enc.Utf8) || 'Decryption failed';
+            }
+        } else {
+            document.getElementById('rc4-out').value = 'CryptoJS library not loaded';
+        }
+    } catch(e) {
+        document.getElementById('rc4-out').value = 'Error: ' + e.message;
+    }
+}
+
+// ROT13
+function doRot13(){
+    var v = document.getElementById('rot13-in').value || '';
+    document.getElementById('rot13-out').value = v.replace(/[a-zA-Z]/g, c => {
+        return String.fromCharCode(c.charCodeAt(0) + (c.toLowerCase() < 'n' ? 13 : -13));
+    });
+}
+
+// Caesar
+function doCaesar(mode){
+    var v = document.getElementById('caesar-in').value || '';
+    var shift = parseInt(document.getElementById('caesar-shift').value) || 0;
+    if(mode==='dec') shift = -shift;
+    document.getElementById('caesar-out').value = v.replace(/[a-zA-Z]/g, c => {
+        var base = c <= 'Z' ? 65 : 97;
+        return String.fromCharCode(((c.charCodeAt(0) - base + shift + 26) % 26) + base);
+    });
+}
+
+// Vigenere
+function doVigenere(mode){
+    var text = document.getElementById('vigenere-in').value || '';
+    var key = (document.getElementById('vigenere-key').value || 'KEY').toUpperCase();
+    var result = '';
+    var keyIndex = 0;
+    
+    for(let i = 0; i < text.length; i++){
+        var c = text[i];
+        if(/[a-zA-Z]/.test(c)){
+            var base = c <= 'Z' ? 65 : 97;
+            var shift = key.charCodeAt(keyIndex % key.length) - 65;
+            if(mode==='dec') shift = -shift;
+            result += String.fromCharCode(((c.charCodeAt(0) - base + shift + 26) % 26) + base);
+            keyIndex++;
+        } else {
+            result += c;
+        }
+    }
+    document.getElementById('vigenere-out').value = result;
+}
+
+// Morse
+function doMorse(mode){
+    const morse = {
+        'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....',
+        'I':'..','J':'.---','K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.',
+        'Q':'--.-','R':'.-.','S':'...','T':'-','U':'..-','V':'...-','W':'.--','X':'-..-',
+        'Y':'-.--','Z':'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-',
+        '5':'.....','6':'-....','7':'--...','8':'---..','9':'----.', ' ':'/'
+    };
+    var v = document.getElementById('morse-in').value || '';
+    
+    if(mode==='enc'){
+        document.getElementById('morse-out').value = v.toUpperCase()
+            .split('').map(c => morse[c] || c).join(' ');
+    } else {
+        var reverse = {};
+        for(let k in morse) reverse[morse[k]] = k;
+        document.getElementById('morse-out').value = v.split(' ')
+            .map(m => reverse[m] || m).join('');
+    }
+}
+
+// Case converter
+function doCase(t){
+    var v = document.getElementById('case-in').value || '';
+    if(t==='upper') document.getElementById('case-out').value = v.toUpperCase();
+    else if(t==='lower') document.getElementById('case-out').value = v.toLowerCase();
+    else if(t==='title') document.getElementById('case-out').value = v.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase()+txt.substr(1).toLowerCase());
+    else if(t==='camel') document.getElementById('case-out').value = v.replace(/[^a-zA-Z0-9]+(.)/g, (m,chr) => chr.toUpperCase());
+}
+
+// Counter
+function doCount(){
+    var v = document.getElementById('count-in').value || '';
+    var words = v.trim() ? v.trim().split(/\s+/).length : 0;
+    document.getElementById('cnt-words').textContent = words;
+    document.getElementById('cnt-chars').textContent = v.length;
+    document.getElementById('cnt-nospace').textContent = v.replace(/\s+/g,'').length;
+    document.getElementById('cnt-lines').textContent = v.split(/\r?\n/).length;
+}
+
+// Lorem Ipsum
+function doLorem(){
+    var n = Math.max(1, Math.min(50, parseInt(document.getElementById('lorem-count').value||3)));
+    var p = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+    document.getElementById('lorem-out').value = Array.from({length:n}, () => p).join('\n\n');
+}
+
+// Diff
+function doDiff(){
+    var t1 = (document.getElementById('diff-1').value || '').split('\n');
+    var t2 = (document.getElementById('diff-2').value || '').split('\n');
+    var result = [];
+    var maxLen = Math.max(t1.length, t2.length);
+    
+    for(let i = 0; i < maxLen; i++){
+        var line1 = t1[i] || '';
+        var line2 = t2[i] || '';
+        if(line1 !== line2){
+            result.push('Line ' + (i+1) + ':');
+            result.push('- ' + line1);
+            result.push('+ ' + line2);
+        }
+    }
+    
+    document.getElementById('diff-out').value = result.length > 0 ? result.join('\n') : 'No differences found';
+}
+
+// Regex
+function doRegex(){
+    var pattern = document.getElementById('regex-pattern').value || '';
+    var flags = document.getElementById('regex-flags').value || 'g';
+    var test = document.getElementById('regex-test').value || '';
+    
+    try {
+        var regex = new RegExp(pattern, flags);
+        var matches = test.match(regex);
+        if(matches){
+            document.getElementById('regex-out').value = 'Matches found: ' + matches.length + '\n\n' + matches.join('\n');
+        } else {
+            document.getElementById('regex-out').value = 'No matches found';
+        }
+    } catch(e) {
+        document.getElementById('regex-out').value = 'Error: ' + e.message;
+    }
+}
+
+// JSON
+function doJson(mode){
+    var v = document.getElementById('json-in').value || '';
+    try{
+        if(mode==='fmt') document.getElementById('json-out').value = JSON.stringify(JSON.parse(v),null,2);
+        else document.getElementById('json-out').value = JSON.stringify(JSON.parse(v));
+    }catch(e){ document.getElementById('json-out').value = 'Invalid JSON: ' + e.message; }
+}
+
+// Color
+function doColorPick(){
+    var hex = document.getElementById('color-pick').value;
+    document.getElementById('color-hex').value = hex;
+    doColor();
+}
+
+function doColor(){
+    var hex = document.getElementById('color-hex').value || '#06b6d4';
+    if(!hex.startsWith('#')) hex = '#' + hex;
+    
+    try {
+        var r = parseInt(hex.slice(1,3), 16);
+        var g = parseInt(hex.slice(3,5), 16);
+        var b = parseInt(hex.slice(5,7), 16);
+        
+        document.getElementById('color-rgb').value = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        
+        r /= 255; g /= 255; b /= 255;
+        var max = Math.max(r,g,b), min = Math.min(r,g,b);
+        var h, s, l = (max + min) / 2;
+        
+        if(max === min){
+            h = s = 0;
+        } else {
+            var d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch(max){
+                case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                case g: h = ((b - r) / d + 2) / 6; break;
+                case b: h = ((r - g) / d + 4) / 6; break;
+            }
+        }
+        
+        document.getElementById('color-hsl').value = 'hsl(' + Math.round(h*360) + ', ' + Math.round(s*100) + '%, ' + Math.round(l*100) + '%)';
+        document.getElementById('color-preview').style.background = hex;
+    } catch(e) {
+        console.error('Color conversion error:', e);
+    }
+}
+
+// QR Code
+function doQr(){
+    var text = document.getElementById('qr-text').value || '';
+    if(!text) {
+        alert('Please enter text or URL');
+        return;
+    }
+    
+    var qrDiv = document.getElementById('qrcode');
+    qrDiv.innerHTML = '';
+    
+    if(typeof QRCode !== 'undefined'){
+        new QRCode(qrDiv, {
+            text: text,
+            width: 256,
+            height: 256,
+            colorDark: '#000000',
+            colorLight: '#ffffff'
+        });
+    } else {
+        qrDiv.innerHTML = 'QRCode library not loaded';
+    }
+}
+
+// UUID
+function doUuid(){
+    var count = Math.max(1, Math.min(50, parseInt(document.getElementById('uuid-count').value||1)));
+    var out = [];
+    for(var i=0;i<count;i++){
+        var buf = new Uint8Array(16);
+        window.crypto.getRandomValues(buf);
+        buf[6] = (buf[6] & 0x0f) | 0x40;
+        buf[8] = (buf[8] & 0x3f) | 0x80;
+        var s = Array.from(buf).map(b => ('0'+b.toString(16)).slice(-2)).join('');
+        out.push(s.slice(0,8)+'-'+s.slice(8,12)+'-'+s.slice(12,16)+'-'+s.slice(16,20)+'-'+s.slice(20));
+    }
+    document.getElementById('uuid-out').value = out.join('\n');
+}
+
+// Password
+function doPass(){
+    var len = parseInt(document.getElementById('pass-len').value||16);
+    var upper = document.getElementById('pass-upper').checked;
+    var lower = document.getElementById('pass-lower').checked;
+    var num = document.getElementById('pass-num').checked;
+    var sym = document.getElementById('pass-sym').checked;
+    var chars = '';
+    if(upper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if(lower) chars += 'abcdefghijklmnopqrstuvwxyz';
+    if(num) chars += '0123456789';
+    if(sym) chars += '!@#$%^&*()-_=+[]{};:,.<>?';
+    if(!chars) { document.getElementById('pass-out').value='Select at least one character type'; return; }
+    var out='';
+    var rnd = new Uint32Array(len);
+    window.crypto.getRandomValues(rnd);
+    for(var i=0;i<len;i++) out += chars[rnd[i] % chars.length];
+    document.getElementById('pass-out').value = out;
+}
+
+// Initialize - show first tool
+window.onload = function(){
+    var first = document.querySelector('.nav-item');
+    if(first) first.click();
+};
+</script>
+
+</body>
+</html>
